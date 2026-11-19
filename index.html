@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#991b1b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="تطبيق الناري" />
+  <title>تطبيق الناري | تكنولوجيا المعلومات للصف السادس الابتدائي</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cairo & Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            nari: {
+              dark: '#7f1d1d',
+              primary: '#991b1b',
+              fire: '#dc2626',
+              orange: '#ea580c',
+              gold: '#d97706',
+              light: '#fef2f2',
+              cream: '#fffbeb',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: 84px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #991b1b;
+    }
+
+    .fire-gradient {
+      background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 55%, #ea580c 100%);
+    }
+
+    .gold-gradient {
+      background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+    }
+
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    }
+
+    .en-badge {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .code-snippet {
+      direction: ltr;
+      text-align: left;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.25s ease-out forwards;
+    }
+
+    /* Certificate Print Styling */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #certificate-area, #certificate-area * {
+        visibility: visible;
+      }
+      #certificate-area {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-red-200 selection:text-red-900">
+
+  <!-- Top App Bar -->
+  <header class="fire-gradient text-white sticky top-0 z-40 shadow-lg rounded-b-3xl">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center text-2xl shadow-inner">
+          🔥
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-black tracking-tight leading-tight flex items-center gap-2">
+            تطبيق الناري
+            <span class="text-[11px] font-bold bg-amber-400 text-red-950 px-2 py-0.5 rounded-full">6 ابتدائي</span>
+          </h1>
+          <p class="text-xs text-red-100 font-medium">تكنولوجيا المعلومات والاتصالات • الترم الأول</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Points Counter Pill -->
+        <div class="bg-black/25 backdrop-blur-sm border border-white/15 px-3 py-1.5 rounded-2xl flex items-center gap-1.5" title="نقاطك المكتسبة">
+          <i class="fa-solid fa-trophy text-amber-300 text-sm"></i>
+          <span id="header-points" class="font-extrabold text-sm text-amber-200">0</span>
+          <span class="text-[10px] text-red-100 hidden sm:inline">نقطة</span>
+        </div>
+
+        <!-- Install App Button -->
+        <button onclick="openInstallModal()" class="bg-white/15 hover:bg-white/25 active:scale-95 transition text-white p-2.5 rounded-2xl border border-white/20 flex items-center gap-1.5 text-xs font-bold" title="تثبيت التطبيق على الهاتف">
+          <i class="fa-solid fa-mobile-screen-button text-sm"></i>
+          <span class="hidden sm:inline">تثبيت التطبيق</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Strip -->
+    <div class="max-w-4xl mx-auto px-5 pb-3">
+      <div class="flex justify-between items-center text-[11px] text-red-100 mb-1">
+        <span>إنجاز المذاكرة (<span id="completed-count">0</span> / 15 درس)</span>
+        <span id="progress-percent" class="font-bold text-amber-300">0%</span>
+      </div>
+      <div class="w-full bg-black/25 h-2 rounded-full overflow-hidden">
+        <div id="progress-bar" class="bg-gradient-to-l from-amber-300 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-4xl mx-auto px-4 pt-5">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: المذاكرة والشرح الشامل -->
+    <!-- ========================================== -->
+    <section id="tab-lessons" class="space-y-4 animate-pop">
+      <!-- Search & Axis Filter -->
+      <div class="bg-white p-3.5 rounded-3xl card-shadow border border-slate-100 space-y-3">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="lesson-search" oninput="filterLessons()" placeholder="ابحث عن درس، مصطلح (مثل: مودم، VR، HTML، تشفير)..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pr-10 pl-4 text-sm focus:outline-none focus:border-red-600 focus:bg-white transition" />
+        </div>
+
+        <div class="flex gap-2 overflow-x-auto pb-1">
+          <button onclick="setAxisFilter('all')" id="filter-all" class="axis-btn px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-red-800 text-white shadow-sm transition">
+            جميع الدروس (15)
+          </button>
+          <button onclick="setAxisFilter(1)" id="filter-1" class="axis-btn px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-red-50 transition">
+            المحور الأول: دور التكنولوجيا (8)
+          </button>
+          <button onclick="setAxisFilter(2)" id="filter-2" class="axis-btn px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-red-50 transition">
+            المحور الثاني: السلامة الرقمية (7)
+          </button>
+        </div>
+      </div>
+
+      <!-- Lessons List Container -->
+      <div id="lessons-container" class="space-y-3.5"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: جداول المقارنة والمصطلحات ووسوم HTML -->
+    <!-- ========================================== -->
+    <section id="tab-compare" class="hidden space-y-5 animate-pop">
+      <div class="bg-white p-4 rounded-3xl card-shadow border border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+          <div>
+            <h2 class="text-lg font-black text-red-900 flex items-center gap-2">
+              <i class="fa-solid fa-scale-balanced text-orange-600"></i>
+              أهم المقارنات والمصطلحات ووسوم HTML
+            </h2>
+            <p class="text-xs text-slate-500">بطاقات مركزة لأهم نقاط الامتحانات والمقارنات الحاسمة</p>
+          </div>
+          <div class="flex gap-1.5 bg-slate-100 p-1 rounded-2xl">
+            <button onclick="switchCompareSub('comparisons')" id="sub-btn-comparisons" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-red-800 text-white transition">المقارنات</button>
+            <button onclick="switchCompareSub('html')" id="sub-btn-html" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-red-800 transition">وسوم HTML</button>
+            <button onclick="switchCompareSub('terms')" id="sub-btn-terms" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-red-800 transition">المصطلحات</button>
+          </div>
+        </div>
+
+        <input type="text" id="compare-search" oninput="renderCompareTab()" placeholder="ابحث داخل المقارنات أو الوسوم أو المصطلحات..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 px-4 text-sm focus:outline-none focus:border-red-600" />
+      </div>
+
+      <div id="compare-content" class="space-y-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: الاختبارات التفاعلية والشهادة -->
+    <!-- ========================================== -->
+    <section id="tab-quiz" class="hidden space-y-4 animate-pop">
+      <!-- Quiz Setup / Dashboard -->
+      <div id="quiz-start-card" class="bg-white p-5 rounded-3xl card-shadow border border-slate-100 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl fire-gradient text-white flex items-center justify-center text-xl shadow-md">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-black text-slate-900">تحدي الناري التفاعلي (35 سؤالًا)</h2>
+            <p class="text-xs text-slate-500">اختر الإجابة الصحيحة + صح أم خطأ مع تصحيح فوري وشرح كل إجابة</p>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 space-y-2">
+          <label for="student-name-input" class="block text-xs font-bold text-amber-900">
+            <i class="fa-solid fa-user-graduate ml-1"></i> اكتب اسمك الثلاثي ليُطبع على شهادة التقدير في نهاية الاختبار:
+          </label>
+          <input type="text" id="student-name-input" placeholder="مثال: أحمد محمد محمود" class="w-full bg-white border border-amber-300 rounded-xl px-3.5 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:border-red-600" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <button onclick="startQuiz('all')" class="fire-gradient text-white p-3.5 rounded-2xl font-bold text-sm shadow-md hover:opacity-95 active:scale-98 transition flex flex-col items-center gap-1">
+            <span>الاختبار الشامل (35 سؤال)</span>
+            <span class="text-[11px] font-normal text-red-100">المحور الأول + الثاني</span>
+          </button>
+          <button onclick="startQuiz(1)" class="bg-slate-800 text-white p-3.5 rounded-2xl font-bold text-sm shadow-sm hover:bg-slate-900 active:scale-98 transition flex flex-col items-center gap-1">
+            <span>اختبار المحور الأول</span>
+            <span class="text-[11px] font-normal text-slate-300">18 سؤالًا متنوعًا</span>
+          </button>
+          <button onclick="startQuiz(2)" class="bg-orange-600 text-white p-3.5 rounded-2xl font-bold text-sm shadow-sm hover:bg-orange-700 active:scale-98 transition flex flex-col items-center gap-1">
+            <span>اختبار المحور الثاني</span>
+            <span class="text-[11px] font-normal text-orange-100">17 سؤالًا متنوعًا</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Quiz Arena -->
+      <div id="quiz-arena" class="hidden space-y-4">
+        <div class="bg-white p-4 rounded-3xl card-shadow border border-slate-100">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-600 mb-2">
+            <span>السؤال <span id="q-current" class="text-red-700 text-sm">1</span> من <span id="q-total">35</span></span>
+            <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
+              النتيجة: <span id="q-score">0</span>
+            </span>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div id="q-progress-bar" class="fire-gradient h-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div id="question-box" class="bg-white p-5 rounded-3xl card-shadow border border-slate-100 space-y-4">
+          <div class="flex items-center gap-2">
+            <span id="q-badge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-red-50 text-red-800 border border-red-200">اختر الإجابة الصحيحة</span>
+            <span id="q-axis-badge" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">المحور الأول</span>
+          </div>
+
+          <h3 id="q-text" class="text-base sm:text-lg font-extrabold text-slate-900 leading-relaxed"></h3>
+
+          <div id="q-options" class="space-y-2.5"></div>
+
+          <!-- Instant Explanation Box -->
+          <div id="q-explanation" class="hidden rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed border"></div>
+
+          <div class="pt-2 flex justify-between items-center">
+            <button onclick="resetQuizToMenu()" class="text-xs font-bold text-slate-500 hover:text-red-700 px-3 py-2">
+              <i class="fa-solid fa-arrow-right ml-1"></i> إنهاء والعودة
+            </button>
+            <button id="q-next-btn" onclick="nextQuestion()" class="hidden fire-gradient text-white px-6 py-2.5 rounded-2xl text-sm font-bold shadow-md hover:opacity-95 transition">
+              السؤال التالي <i class="fa-solid fa-arrow-left mr-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Result & Certificate -->
+      <div id="quiz-result-card" class="hidden space-y-4">
+        <div id="certificate-area" class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border-4 border-double border-amber-500 text-center space-y-4 relative overflow-hidden">
+          <div class="w-16 h-16 mx-auto rounded-full gold-gradient text-white flex items-center justify-center text-3xl shadow-lg">
+            🏆
+          </div>
+          <div class="space-y-1">
+            <span class="text-xs font-extrabold tracking-wider text-red-800 bg-red-50 px-3 py-1 rounded-full border border-red-200">سلسلة الناري التعليمية</span>
+            <h2 class="text-2xl font-black text-slate-900 pt-1">شهادة تقدير وتفوق</h2>
+            <p class="text-xs text-slate-500">في مادة تكنولوجيا المعلومات والاتصالات — الصف السادس الابتدائي</p>
+          </div>
+
+          <div class="py-2">
+            <p class="text-sm text-slate-600">تُمنح هذه الشهادة للطالب المتفوق / الطالبة المتفوقة:</p>
+            <div id="cert-student-name" class="text-xl sm:text-2xl font-black text-red-800 my-2 border-b-2 border-dashed border-amber-400 inline-block px-6 pb-1">
+              بطل الناري
+            </div>
+            <p class="text-sm text-slate-700 mt-2">
+              لاجتيازه اختبار المراجعة الشاملة بنجاح وحصوله على درجة:
+            </p>
+            <div class="text-3xl font-black text-emerald-700 mt-1">
+              <span id="cert-score">0</span> / <span id="cert-total">35</span>
+              <span id="cert-percent" class="text-lg text-amber-600 mr-2">(100%)</span>
+            </div>
+            <p id="cert-grade-text" class="text-xs font-bold text-slate-600 mt-1">تقدير: ممتاز مع مرتبة الشرف 🌟</p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-200 flex justify-between items-center text-[11px] text-slate-500">
+            <span>توقيع: سلسلة الناري التعليمية 🔥</span>
+            <span id="cert-date"></span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2.5 justify-center">
+          <button onclick="window.print()" class="bg-slate-800 text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow hover:bg-slate-900 transition flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> طباعة / حفظ الشهادة PDF
+          </button>
+          <button onclick="resetQuizToMenu()" class="fire-gradient text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow hover:opacity-95 transition flex items-center gap-2">
+            <i class="fa-solid fa-rotate-right"></i> إعادة الاختبار
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: بنك الأسئلة المقالية (علل، ما المقصود، اذكر وظيفة) -->
+    <!-- ========================================== -->
+    <section id="tab-essay" class="hidden space-y-4 animate-pop">
+      <div class="bg-white p-4 rounded-3xl card-shadow border border-slate-100">
+        <h2 class="text-lg font-black text-red-900 flex items-center gap-2">
+          <i class="fa-solid fa-file-pen text-orange-600"></i>
+          بنك الأسئلة المقالية المتوقعة
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">اختبر حفظك أولًا ثم اضغط على «إظهار الإجابة النموذجية» لمراجعة إجابتك</p>
+
+        <div class="flex gap-2 mt-3 overflow-x-auto pb-1">
+          <button onclick="filterEssay('all')" id="essay-btn-all" class="essay-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-red-800 text-white">الكل (20)</button>
+          <button onclick="filterEssay('define')" id="essay-btn-define" class="essay-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">ما المقصود بـ؟</button>
+          <button onclick="filterEssay('reason')" id="essay-btn-reason" class="essay-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">بم تفسر / علل؟</button>
+          <button onclick="filterEssay('function')" id="essay-btn-function" class="essay-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700">اذكر وظيفة / خطوات</button>
+        </div>
+      </div>
+
+      <div id="essay-container" class="space-y-3"></div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Mobile App Navigation Bar -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <div class="max-w-4xl mx-auto grid grid-cols-4 h-16">
+      <button onclick="switchTab('lessons')" id="nav-lessons" class="nav-item flex flex-col items-center justify-center gap-1 text-red-800 font-extrabold transition">
+        <i class="fa-solid fa-book-open text-lg"></i>
+        <span class="text-[11px]">الشرح (15)</span>
+      </button>
+      <button onclick="switchTab('compare')" id="nav-compare" class="nav-item flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-red-700 font-semibold transition">
+        <i class="fa-solid fa-table-columns text-lg"></i>
+        <span class="text-[11px]">مقارنات ووسوم</span>
+      </button>
+      <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-item flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-red-700 font-semibold transition">
+        <i class="fa-solid fa-circle-question text-lg"></i>
+        <span class="text-[11px]">اختبر نفسك</span>
+      </button>
+      <button onclick="switchTab('essay')" id="nav-essay" class="nav-item flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-red-700 font-semibold transition">
+        <i class="fa-solid fa-pen-to-square text-lg"></i>
+        <span class="text-[11px]">بنك المقالي</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Install App (APK / PWA) Instructions Modal -->
+  <div id="install-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl animate-pop">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-black text-base text-red-900 flex items-center gap-2">
+          <i class="fa-solid fa-mobile-screen text-orange-600"></i>
+          تثبيت «تطبيق الناري» على هاتفك
+        </h3>
+        <button onclick="closeInstallModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-red-100 hover:text-red-700 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        يمكنك تحويل هذه الصفحة إلى تطبيق كامل بأيقونة على شاشة هاتفك ويعمل في أي وقت بسهولة عبر الخطوات التالية:
+      </p>
+
+      <div class="space-y-2.5 text-xs">
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-800 mb-1"><i class="fa-brands fa-android text-emerald-600 ml-1"></i> لهواتف الأندرويد (متصفح Chrome):</div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-600">
+            <li>افتح هذا الملف في متصفح <strong>Google Chrome</strong>.</li>
+            <li>اضغط على النقاط الثلاث (<strong>⋮</strong>) في أعلى يسار المتصفح.</li>
+            <li>اختر <strong>«الإضافة إلى الشاشة الرئيسية» (Add to Home screen)</strong>.</li>
+            <li>اضغط <strong>«إضافة»</strong> وستظهر أيقونة <strong>تطبيق الناري</strong> وسط تطبيقاتك!</li>
+          </ol>
+        </div>
+
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <div class="font-extrabold text-slate-800 mb-1"><i class="fa-brands fa-apple text-slate-800 ml-1"></i> لهواتف الآيفون والآيباد (Safari):</div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-600">
+            <li>اضغط على زر المشاركة (<i class="fa-solid fa-arrow-up-from-bracket"></i>) في أسفل المتصفح.</li>
+            <li>اختر <strong>«إضافة إلى الصفحة الرئيسية» (Add to Home Screen)</strong>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <button onclick="closeInstallModal()" class="w-full fire-gradient text-white py-2.5 rounded-2xl text-sm font-bold shadow">
+        فهمت، رائع! 🔥
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- COMPLETE DATA & APPLICATION LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // 1. FULL CURRICULUM DATA (ALL 15 LESSONS - ZERO OMISSIONS)
+    const lessonsData = [
+      // --- المحور الأول (8 دروس) ---
+      {
+        id: 'a1-l1',
+        axis: 1,
+        num: 'الدرس 1',
+        title: 'المستكشف النشط: كارتيك ساوني (Kartik Sawhney)',
+        subtitle: 'الذكاء الاصطناعي وتطبيقات مساعدة ذوي الهمم',
+        icon: 'fa-user-astronaut',
+        summary: 'يتناول الدرس قصة عالم الكمبيوتر والمبتكر كارتيك ساوني الذي ساعد المكفوفين وضعاف البصر على دراسة العلوم والرياضيات باستخدام التكنولوجيا.',
+        sections: [
+          {
+            heading: 'من هو كارتيك ساوني؟',
+            points: [
+              'مستكشف نشط وعالم كمبيوتر ومبتكر، وُلد كفيفًا في الهند، وحصل على درجة البكالوريوس والماجستير في علوم الكمبيوتر من جامعة ستانفورد بالولايات المتحدة.',
+              'واجه صعوبة في قراءة الرسوم البيانية والصور الهندسية، فابتكر برمجيات تحوّل الرسوم البيانية إلى ترددات صوتية ليتمكن المكفوفون من «سماع» الرسوم وفهمها.'
+            ]
+          },
+          {
+            heading: 'أهم إنجازات ومبادرات كارتيك ساوني:',
+            points: [
+              '<strong>تطبيقات الوصول الرقمي:</strong> ابتكر تطبيقات تتيح للمكفوفين وضعاف البصر الوصول إلى المحتوى المرئي والرسوم البيانية وتحويل النصوص إلى ملفات صوتية.',
+              '<strong>منصة I-Stem:</strong> شارك في تأسيس منصة «آي ستيم» (I-Stem) التي توفر برمجيات تغير النصوص الرقمية إلى صيغة يمكن للمكفوفين وضعاف البصر قراءتها بسهولة، كما توفر الإرشاد والتوظيف لذوي الهمم.',
+              '<strong>تطوير الذكاء الاصطناعي (AI):</strong> عمل مع منظمة اليونيسف وشركة مايكروسوفت لتطوير أدوات تعتمد على الذكاء الاصطناعي لمساعدة ذوي الهمم، وحصل على جائزة الملكة للقادة الشباب.'
+            ]
+          },
+          {
+            heading: 'مبادرات جمهورية مصر العربية لدعم ذوي الهمم:',
+            points: [
+              'تولي مصر اهتمامًا كبيرًا بتمكين ذوي الهمم عبر توفير المنح الدراسية وبرامج التدريب التكنولوجي، وتزويد المدارس والجامعات بأدوات التكنولوجيا المساعدة وقارئات الشاشة.',
+              '<strong>مبادرة «المواطنة الرقمية والمسؤولية الاجتماعية»:</strong> أطلقتها وزارة الاتصالات وتكنولوجيا المعلومات المصرية لدعم ذوي الهمم ودمجهم في المجتمع الرقمي.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l2',
+        axis: 1,
+        num: 'الدرس 2',
+        title: 'أجهزة شبكات الكمبيوتر (Computer Network Devices)',
+        subtitle: 'الشبكات السلكية واللاسلكية، المودم، المحولات، الذكاء الاصطناعي',
+        icon: 'fa-network-wired',
+        summary: 'شرح مكونات الشبكات وكيفية توصيل الأجهزة بالإنترنت ودور المودم والمحولات والذكاء الاصطناعي في نقل البيانات.',
+        sections: [
+          {
+            heading: 'ما هي شبكات الكمبيوتر؟',
+            points: [
+              '<strong>شبكات الكمبيوتر:</strong> هي مجموعات من الأجهزة أو الأشياء المرتبطة معًا لأهداف مشتركة مثل تبادل المعلومات والبيانات ومشاركة الملفات والموارد (كالطابعة).'
+            ]
+          },
+          {
+            heading: 'أنواع الشبكات حسب طريقة التوصيل:',
+            points: [
+              '<strong>1. الشبكات السلكية (Wired Networks):</strong> تستخدم الأسلاك والكابلات المادية التي يتم توصيلها في فتحات بالأجهزة تُسمّى <strong>المنافذ (Ports)</strong>. مثال: <strong>الشبكة المحلية (LAN)</strong> في معمل الكمبيوتر بالمدرسة.',
+              '<strong>2. الشبكات اللاسلكية (Wireless Networks):</strong> تربط الأجهزة ببعضها بدون أسلاك عن طريق موجات الراديو باستخدام تقنية <strong>الواي فاي (Wi-Fi)</strong>.'
+            ]
+          },
+          {
+            heading: 'الأجهزة الأساسية لربط الشبكات:',
+            points: [
+              '<strong>مزود خدمة الإنترنت (ISP):</strong> الشركة التي توفر خدمة الاتصال بالإنترنت للمنازل والمؤسسات.',
+              '<strong>المودم (Modem):</strong> جهاز يصل الشبكة المحلية بالإنترنت، ويقوم بـ <strong>تحويل الإشارة المستقبلة من مزود خدمة الإنترنت (ISP) إلى إشارة رقمية</strong> تتعرف عليها الأجهزة وتفهمها.',
+              '<strong>الراوتر / الموجه (Router):</strong> بوابة تربط بين المودم والأجهزة المختلفة، ويوزع الإنترنت في كل مكان بالمنزل سلكيًا أو لاسلكيًا (Wi-Fi).',
+              '<strong>المحولات (Switches):</strong> أجهزة ذكية تُستخدم لإرسال البيانات إلى <strong>جهاز معين ومحدد</strong> عبر الشبكة، مما يساعد في تيسير التواصل وإسراعه وتقليل الازدحام.'
+            ]
+          },
+          {
+            heading: 'دور الذكاء الاصطناعي (AI) في الشبكات:',
+            points: [
+              'تستخدم شبكات الكمبيوتر الحديثة تقنيات الذكاء الاصطناعي (AI) لإنجاز المهام المعقدة، مثل التنبؤ بالأعطال، وتوجيه البيانات بأسرع مسار، وتقليد الأصوات، وكتابة المقالات، وإنتاج الفيديوهات.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l3',
+        axis: 1,
+        num: 'الدرس 3',
+        title: 'التكنولوجيا والذكاء الاصطناعي (VR, AR, AI)',
+        subtitle: 'الواقع الافتراضي، الواقع المعزز، والذكاء الاصطناعي في حياتنا',
+        icon: 'fa-vr-cardboard',
+        summary: 'مقارنة شاملة بين التقنيات المستقبلية الثلاث وكيف تغير التعليم والحياة اليومية وتساعد أصحاب الهمم.',
+        sections: [
+          {
+            heading: '1. الواقع الافتراضي (Virtual Reality - VR):',
+            points: [
+              '<strong>التعريف:</strong> بيئة افتراضية ثلاثية الأبعاد (3D) تسمح للمستخدمين باستكشاف محيطهم والتفاعل معه وكأنه حقيقة.',
+              '<strong>الأداة المطلوبة:</strong> يتطلب ارتداء <strong>نظارة وسماعات رأس خاصة (VR Headset)</strong> تحجب العالم الحقيقي وتوفر رؤية 360 درجة.',
+              '<strong>أمثلة:</strong> زيارة متحف يبعد آلاف الأميال، العودة بالزمن لموقع أثري قديم، أو تكبير الذرات والحشرات في حصص العلوم.'
+            ]
+          },
+          {
+            heading: '2. الواقع المعزز (Augmented Reality - AR):',
+            points: [
+              '<strong>التعريف:</strong> تقنية <strong>تجمع بين العالم الحقيقي والواقع الافتراضي</strong> معًا، من خلال إضافة نماذج ثلاثية الأبعاد وعناصر رقمية إلى بيئتك الحقيقية عبر كاميرا الهاتف الذكي أو الجهاز اللوحي.',
+              '<strong>أمثلة:</strong> عرض مجسم ثلاثي الأبعاد لقلب الإنسان أو مكعب داخل غرفة المعيشة عبر الهاتف، أو تطبيقات التسوق لمعاينة الأثاث في غرفتك قبل شرائه.'
+            ]
+          },
+          {
+            heading: '3. الذكاء الاصطناعي (Artificial Intelligence - AI):',
+            points: [
+              '<strong>التعريف:</strong> قدرة الكمبيوتر على التفكير والتعلّم والاستنتاج وحل المشكلات واتخاذ القرارات لمحاكاة تفكير العنصر البشري وأدائه.',
+              '<strong>أمثلة:</strong> فتح الهاتف بنظام <strong>التعرف على الوجه</strong>، وتوقع الكلمات أثناء الكتابة على الهاتف، والمساعدات الصوتية الذكية.'
+            ]
+          },
+          {
+            heading: 'كيف تحسّن التكنولوجيا المستقبلية حياة أصحاب الهمم؟',
+            points: [
+              'تساعد ضعاف البصر على رؤية أفراد أسرهم عن قرب، وتساعد ذوي الإعاقة في إنجاز مهامهم اليومية كالتواصل مع الآخرين والاتصال بهم بسهولة.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l4',
+        axis: 1,
+        num: 'الدرس 4',
+        title: 'تقييم التكنولوجيا المتطورة (Evaluating Cutting-Edge Technology)',
+        subtitle: 'التكنولوجيا المساعدة وتجربة المستخدم (UX)',
+        icon: 'fa-universal-access',
+        summary: 'الفرق بين التكنولوجيا المتطورة والمساعدة، وأمثلة لأجهزة ذوي الهمم، ومعايير تقييم تجربة المستخدم.',
+        sections: [
+          {
+            heading: 'مفاهيم أساسية:',
+            points: [
+              '<strong>التكنولوجيا المتطورة (Cutting-edge Technology):</strong> هي أحدث إصدار من الخدمات أو المنتجات وأكثرها تقدمًا.',
+              '<strong>التكنولوجيا المساعدة (Assistive Technology):</strong> أجهزة وبرامج تساعد أصحاب الهمم في أداء المهام التي يجدون صعوبة في القيام بها بمفردهم، مما يعزز <strong>استقلاليتهم</strong>.'
+            ]
+          },
+          {
+            heading: 'أمثلة التكنولوجيا المتطورة لذوي الاحتياجات الخاصة:',
+            points: [
+              '<strong>برمجيات تكبير الشاشة والأوامر الصوتية:</strong> في الهواتف الذكية لمساعدة ضعاف البصر ومن يجدون صعوبة في استخدام أيديهم.',
+              '<strong>أجهزة الكمبيوتر المزودة بلوحة مفاتيح «برايل» (Braille):</strong> لمساعدة المكفوفين على القراءة والكتابة.',
+              '<strong>القفازات الذكية (Smart Gloves):</strong> تترجم إشارات لغة الإشارة فورًا إلى نص مكتوب أو كلام منطوق للصم وضعاف السمع.',
+              '<strong>برمجيات قارئات الشاشة (Screen Readers):</strong> تحول النصوص الرقمية إلى صوت مسموع.'
+            ]
+          },
+          {
+            heading: 'تجربة المستخدم (User Experience - UX):',
+            points: [
+              '<strong>التعريف:</strong> تصف كيفية استخدام الشخص للمنتج التكنولوجي والتفاعل معه، وتقييم مدى سهولته وفائدته وشعوره تجاهه (إيجابية أو سلبية).',
+              '<strong>علاقتها بتطوير المنتجات:</strong> ترتبط تجربة المستخدم بتطوير المنتجات والخدمات؛ فإذا كانت إيجابية يزداد الإقبال على المنتج، وإذا كانت سلبية يعمل المصممون على تحسينه ليصبح متاحًا للجميع (بما فيهم كبار السن وذوو الهمم).'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l5',
+        axis: 1,
+        num: 'الدرس 5',
+        title: 'مهارات البحث الرقمي (Digital Search Skills)',
+        subtitle: 'قواعد البيانات، محركات البحث، الفهارس، والبحث المنطقي (AND / OR / NOT)',
+        icon: 'fa-magnifying-glass-chart',
+        summary: 'كيفية البحث باحترافية في قواعد البيانات ومحركات البحث، واستخدام معاملات البحث المنطقي واختصارات لوحة المفاتيح.',
+        sections: [
+          {
+            heading: 'أدوات البحث الرقمي ومميزات كل منها:',
+            points: [
+              '<strong>1. محركات البحث (Search Engines) مثل Google:</strong> سريعة وسهلة وتعطي نتائج من كل العالم في وقت واحد، لكن يجب التحقق من دقة وموثوقية المعلومات.',
+              '<strong>2. قواعد البيانات (Databases):</strong> مجموعات من المعلومات المنظمة والمخزنة في نظام كمبيوتر (مثل <strong>بنك المعرفة المصري EKB</strong>)، وتتميز بأن نتائجها دقيقة وموثوقة، ويمكن البحث فيها بالكلمات المفتاحية أو اسم المؤلف أو العنوان.',
+              '<strong>3. فهارس المكتبات (Library Catalogs):</strong> قاعدة بيانات تضم جميع المصادر والكتب الموجودة في مكتبة معينة، مثل <strong>فهرس مكتبة الإسكندرية</strong> المتاح عبر الإنترنت.'
+            ]
+          },
+          {
+            heading: 'أسلوب البحث المنطقي (Boolean Operators):',
+            points: [
+              '<strong>معامل الربط (AND):</strong> يجمع بين الكلمتين معًا؛ فتظهر النتائج التي تحتوي على <strong>جميع</strong> الكلمات المحددة (يُضيّق نطاق البحث ويجعله أدق). مثال: <span class="en-badge font-bold text-blue-700">الذكاء الاصطناعي AND التعليم</span>.',
+              '<strong>معامل التخيير (OR):</strong> يبحث عن أيٍّ من الكلمتين؛ فتظهر النتائج التي تحتوي على <strong>إحدى</strong> الكلمات أو جميعها (يُوسّع نطاق البحث). مثال: <span class="en-badge font-bold text-blue-700">الهواتف OR الأجهزة اللوحية</span>.',
+              '<strong>معامل الاستبعاد (NOT):</strong> يستبعد الكلمة التي تليه من نتائج البحث. مثال: <span class="en-badge font-bold text-blue-700">الشبكات NOT السلكية</span>.'
+            ]
+          },
+          {
+            heading: 'اختصارات لوحة المفاتيح الأساسية أثناء البحث والكتابة:',
+            points: [
+              '<strong>النسخ (Copy):</strong> <span class="en-badge font-bold text-red-800">Ctrl + C</span> (أخذ نسخة مع إبقاء الأصل).',
+              '<strong>القص (Cut):</strong> <span class="en-badge font-bold text-red-800">Ctrl + X</span> (نقل النص وإزالته من مكانه الأصلي).',
+              '<strong>اللصق (Paste):</strong> <span class="en-badge font-bold text-red-800">Ctrl + V</span> (وضع النص المنسوخ أو المقصوص في المكان الجديد).'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l6',
+        axis: 1,
+        num: 'الدرس 6',
+        title: 'الأجهزة المحمولة (Mobile Devices)',
+        subtitle: 'الهواتف الذكية، الأجهزة اللوحية، القارئات الإلكترونية، ورموز QR',
+        icon: 'fa-tablet-screen-button',
+        summary: 'أنواع الأجهزة المحمولة ومميزاتها في التعليم ورموز الاستجابة السريعة QR Code.',
+        sections: [
+          {
+            heading: 'أنواع الأجهزة المحمولة الشائعة:',
+            points: [
+              '<strong>الهواتف الذكية (Smartphones) والأجهزة اللوحية (Tablets):</strong> أجهزة صغيرة محمولة تعمل باللمس، وتُستخدم في تصفح الإنترنت، والبريد الإلكتروني، ومشاهدة الفيديوهات التعليمية، والتواصل الاجتماعي، والتصوير.',
+              '<strong>القارئات الإلكترونية (E-Readers):</strong> أجهزة محمولة مخصصة لقراءة الكتب الرقمية، تشبه الأجهزة اللوحية لكن شاشتها مصممة لتكون مريحة للعين في ضوء الشمس وتدوم بطاريتها لفترات طويلة جدًا.'
+            ]
+          },
+          {
+            heading: 'رموز الاستجابة السريعة (QR Codes):',
+            points: [
+              '<strong>التعريف:</strong> هي مربعات تحتوي على نمط من النقاط والخطوط السوداء والبيضاء، تُستخدم للوصول السريع إلى المعلومات ومواقع الويب والفيديوهات بمجرد مسحها بكاميرا الهاتف الذكي أو الجهاز اللوحي دون الحاجة لكتابة روابط طويلة.'
+            ]
+          },
+          {
+            heading: 'فوائد الأجهزة المحمولة وتحدياتها في التعليم:',
+            points: [
+              '<strong>الفوائد:</strong> سهولة حملها في أي مكان، وتوفير تطبيقات تعليمية تفاعلية، ومساعدة ذوي الهمم في التعلم والتواصل.',
+              '<strong>التحديات:</strong> صغر حجم الشاشة ولوحة المفاتيح أحيانًا، واحتمال تشتت الانتباه أو إجهاد العين عند الإفراط في استخدامها.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l7',
+        axis: 1,
+        num: 'الدرس 7',
+        title: 'أنظمة التشغيل (Operating Systems)',
+        subtitle: 'Windows, macOS, Android, iOS, ROS، وأنظمة مفتوحة ومغلقة المصدر',
+        icon: 'fa-microchip',
+        summary: 'وظيفة نظام التشغيل، وأشهر أنظمة الكمبيوتر والهواتف والروبوتات، والفرق بين مفتوح المصدر ومغلق المصدر.',
+        sections: [
+          {
+            heading: 'ما هو نظام التشغيل (Operating System - OS)؟',
+            points: [
+              'هو البرنامج الأساسي الذي يدير وظائف الكمبيوتر أو الهاتف الذكي، ويشغّل البرامج والأجهزة الملحقة (كالطابعة والماوس)، ويعمل كوسيط بين المستخدم ومكونات الجهاز المادية (Hardware).'
+            ]
+          },
+          {
+            heading: 'أشهر أنظمة التشغيل حسب نوع الجهاز:',
+            points: [
+              '<strong>أجهزة الكمبيوتر:</strong> <strong>مايكروسوفت ويندوز (Windows)</strong> وهو الأكثر انتشارًا عالميًا، ونظام <strong>ماك أو إس (macOS)</strong> الخاص بأجهزة كمبيوتر شركة آبل (Apple).',
+              '<strong>الهواتف الذكية والأجهزة اللوحية:</strong> <strong>أندرويد (Android)</strong> وهو الأكثر انتشارًا وتستخدمه معظم الشركات، ونظام <strong>آي أو إس (iOS)</strong> الحصري لهواتف آيفون وأجهزة آيباد من شركة آبل.',
+              '<strong>الأنظمة المتطورة والروبوتات:</strong> <strong>نظام تشغيل الروبوت (ROS)</strong> وهو برمجية مفتوحة المصدر لبناء تطبيقات الروبوتات، بالإضافة لأنظمة تشغيل السيارات ذاتية القيادة (مثل تسلا وآبل وجوجل).'
+            ]
+          },
+          {
+            heading: 'مقارنة: مفتوح المصدر vs مغلق المصدر:',
+            points: [
+              '<strong>مفتوح المصدر (Open-Source):</strong> أنظمة يمكن لأي شخص قراءة الكود البرمجي الخاص بها وتعديله وتطويره ومشاركته (مثل: <strong>Android, Linux, ROS</strong>).',
+              '<strong>مغلقة المصدر (Closed-Source):</strong> أنظمة لا يمكن لأي شخص رؤية الكود البرمجي الخاص بها أو تعديله إلا الشركة المالكة فقط (مثل: <strong>Windows, macOS, iOS</strong>).'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1-l8',
+        axis: 1,
+        num: 'الدرس 8',
+        title: 'تصميم مواقع الإنترنت بلغة HTML',
+        subtitle: 'هيكل صفحة الويب وأهم الوسوم (Tags) ووظائفها',
+        icon: 'fa-code',
+        summary: 'تعريف لغة HTML، وكيفية كتابتها في محرر النصوص، وشرح كامل لجميع الوسوم المقررة في المنهج.',
+        sections: [
+          {
+            heading: 'ما هي لغة HTML؟',
+            points: [
+              '<strong>لغة ترميز النص التشعبي (HTML - HyperText Markup Language):</strong> هي اللغة البرمجية القياسية المستخدمة في إنشاء وتصميم صفحات الويب وعرض محتواها في متصفحات الإنترنت.',
+              'تُكتب أوامرها بين قوسين زاويين <span class="en-badge font-bold text-blue-700">&lt; &gt;</span> وتُسمى <strong>الوسوم (Tags)</strong>، ويتكون معظمها من وسم فتح <span class="en-badge font-bold text-blue-700">&lt;p&gt;</span> ووسم إغلاق <span class="en-badge font-bold text-blue-700">&lt;/p&gt;</span>.'
+            ]
+          },
+          {
+            heading: 'جميع وسوم HTML المقررة في المنهج:',
+            points: [
+              '<span class="en-badge font-bold text-red-800">&lt;html&gt; ... &lt;/html&gt;</span> : يحيط بجميع أكواد ومحتويات صفحة الويب.',
+              '<span class="en-badge font-bold text-red-800">&lt;head&gt; ... &lt;/head&gt;</span> : يحتوي على المعلومات الوصفية وعنوان الصفحة.',
+              '<span class="en-badge font-bold text-red-800">&lt;title&gt; ... &lt;/title&gt;</span> : يحدد <strong>عنوان صفحة الويب</strong> الذي يظهر في تبويب المتصفح.',
+              '<span class="en-badge font-bold text-red-800">&lt;body&gt; ... &lt;/body&gt;</span> : يضم <strong>كل المحتوى المرئي</strong> الذي يظهر للمستخدم في الصفحة.',
+              '<span class="en-badge font-bold text-red-800">&lt;h1&gt; ... &lt;/h1&gt;</span> : لإنشاء <strong>أكبر عنوان رئيسي</strong> في الصفحة.',
+              '<span class="en-badge font-bold text-red-800">&lt;h2&gt; ... &lt;/h2&gt;</span> : لإنشاء <strong>عنوان فرعي</strong> أصغر من العنوان الرئيسي.',
+              '<span class="en-badge font-bold text-red-800">&lt;h6&gt; ... &lt;/h6&gt;</span> : لإنشاء <strong>أصغر عنوان فرعي</strong> في الصفحة.',
+              '<span class="en-badge font-bold text-red-800">&lt;p&gt; ... &lt;/p&gt;</span> : لإنشاء <strong>فقرة نصية (Paragraph)</strong>.',
+              '<span class="en-badge font-bold text-red-800">&lt;strong&gt; ... &lt;/strong&gt;</span> : لجعل النص مهمًا ومكتوبًا بـ <strong>خط عريض (Bold)</strong>.',
+              '<span class="en-badge font-bold text-red-800">&lt;i&gt; ... &lt;/i&gt;</span> : لجعل النص مكتوبًا بـ <em>خط مائل (Italic)</em>.',
+              '<span class="en-badge font-bold text-red-800">&lt;a href="..."&gt; ... &lt;/a&gt;</span> : لإنشاء <strong>رابط تشعبي (Hyperlink)</strong>.',
+              '<span class="en-badge font-bold text-red-800">&lt;img src="..." alt="..."&gt;</span> : لإضافة <strong>صورة</strong> (حيث <span class="en-badge">src</span> مسار الصورة و<span class="en-badge">alt</span> النص البديل لوصفها).'
+            ]
+          },
+          {
+            heading: 'فائدة تقسيم الصفحة إلى عناوين وفقرات:',
+            points: [
+              'يساعد تقسيم الصفحة بعناوين رئيسية وفرعية وفقرات واضحة في <strong>تسهيل القراءة والبحث البصري</strong> على الزائر، ويجعل الصفحة منظمة وجذابة.'
+            ]
+          }
+        ]
+      },
+
+      // --- المحور الثاني (7 دروس) ---
+      {
+        id: 'a2-l1',
+        axis: 2,
+        num: 'الدرس 1',
+        title: 'المستكشف النشط: ديانا ديموترو (Diana Dimitrova)',
+        subtitle: 'باحثة في مجال الأمن الرقمي وحماية البيانات الشخصية',
+        icon: 'fa-user-shield',
+        summary: 'دور باحثي الأمن الرقمي في توعية الأفراد وحماية بياناتهم الشخصية من الاختراق والمخاطر الإلكترونية.',
+        sections: [
+          {
+            heading: 'من هي ديانا ديموترو؟',
+            points: [
+              'باحثة ومستكشفة في مجال <strong>الأمن الرقمي (Digital Security)</strong> وحماية البيانات، تعمل على توعية المستخدمين (خاصة الشباب والطلاب) بكيفية حماية خصوصيتهم وبياناتهم على الإنترنت.'
+            ]
+          },
+          {
+            heading: 'أهم مبادئ حماية البيانات التي تدعو إليها:',
+            points: [
+              '<strong>تقييم المخاطر الرقمية:</strong> التفكير قبل مشاركة أي صورة أو معلومة شخصية عبر الإنترنت لأنها تترك <strong>بصمة رقمية (Digital Footprint)</strong> دائمة.',
+              '<strong>ضبط إعدادات الخصوصية:</strong> التأكد من أن الحسابات الشخصية على منصات التواصل الاجتماعي متاحة للأصدقاء والموثوقين فقط وليست عامة للغرباء.',
+              '<strong>تحديث البرمجيات باستمرار:</strong> لأن التحديثات الأمنية تسد الثغرات التي يستغلها المخترقون للوصول إلى الأجهزة.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l2',
+        axis: 2,
+        num: 'الدرس 2',
+        title: 'كيف تتعامل مع الألعاب الإلكترونية؟',
+        subtitle: 'المخاطر الجسدية والنفسية والأمنية للألعاب وقواعد اللعب الآمن',
+        icon: 'fa-gamepad',
+        summary: 'شرح الأنواع الثلاثة لمخاطر الألعاب الإلكترونية (جسدية، نفسية، أمنية) وكيفية الاستمتاع بالألعاب بأمان.',
+        sections: [
+          {
+            heading: 'أولًا: المخاطر الجسدية (Physical Dangers):',
+            points: [
+              'إجهاد العينين والصداع بسبب التحديق الطويل في الشاشة.',
+              'آلام الظهر والرقبة واليدين نتيجة الجلوس بوضعية خاطئة لساعات طويلة.',
+              'اضطرابات النوم وزيادة الوزن وقلة النشاط البدني.'
+            ]
+          },
+          {
+            heading: 'ثانيًا: المخاطر النفسية والاجتماعية (Psychological Dangers):',
+            points: [
+              'الشعور بالقلق والتوتر والعزلة والابتعاد عن الأسرة والأصدقاء الحقيقيين.',
+              'توليد مشاعر عدوانية نتيجة بعض الألعاب العنيفة، وإهمال الدراسة والواجبات المدرسية.'
+            ]
+          },
+          {
+            heading: 'ثالثًا: المخاطر الأمنية (Security Dangers):',
+            points: [
+              'مشاركة المعلومات الشخصية (الاسم الكامل، العنوان، المدرسة، رقم الهاتف) مع غرباء في الألعاب الجماعية.',
+              'التعرّض للتنمر الإلكتروني، أو اختراق الحسابات وسرقة البيانات عبر روابط تحميل مجانية مزيفة.'
+            ]
+          },
+          {
+            heading: 'قواعد اللعب الآمن والمسؤول:',
+            points: [
+              'تحديد جدول زمني للعب والالتزام به بالتشاور مع الوالدين، وأخذ فترات راحة منتظمة لإراحة العين وممارسة الرياضة.',
+              'استخدام لقب مستعار (Nickname) وعدم مشاركة أي معلومات شخصية أو صور مع الغرباء، وحظر المتنمرين والإبلاغ عنهم فورًا.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l3',
+        axis: 2,
+        num: 'الدرس 3',
+        title: 'حماية نفسك من السرقة الرقمية (Digital Theft Protection)',
+        subtitle: 'كلمات المرور القوية، المصادقة متعددة العوامل MFA، التشفير الكامل، البصمة',
+        icon: 'fa-lock',
+        summary: 'أقوى أساليب تأمين الحسابات والبيانات: كلمات المرور، برامج إدارتها، المصادقة MFA، التشفير، والمصادقة البيومترية.',
+        sections: [
+          {
+            heading: '1. كلمات المرور القوية وبرامج إدارتها:',
+            points: [
+              '<strong>كلمة المرور القوية:</strong> يجب ألا تقل عن <strong>8 خانات/أحرف</strong> (ويفضل 12)، وتجمع بين أحرف كبيرة (A-Z) وصغيرة (a-z) وأرقام (0-9) ورموز خاصة (@#$%)، وألا تتضمن اسمك أو تاريخ ميلادك.',
+              '<strong>برامج إدارة كلمات المرور (Password Managers):</strong> تطبيقات آمنة تنشئ كلمات مرور قوية وفريدة لكل حساب وتحفظها مشفرة.'
+            ]
+          },
+          {
+            heading: '2. المصادقة متعددة العوامل (Multi-Factor Authentication - MFA):',
+            points: [
+              '<strong>التعريف:</strong> طبقة حماية إضافية تتطلب <strong>طريقتين مختلفتين على الأقل</strong> لتأكيد هويتك عند تسجيل الدخول؛ مثل: إدخال كلمة المرور + رمز تحقق مؤقت (OTP) يُرسل إلى هاتفك أو بريدك.'
+            ]
+          },
+          {
+            heading: '3. المصادقة ببصمة الإصبع والتعرف على الوجه:',
+            points: [
+              'استخدام سماتك الجسدية الفريدة (بصمة الإصبع أو مسح الوجه) لفتح الجهاز أو التطبيقات بسرعة وأمان عالٍ.'
+            ]
+          },
+          {
+            heading: '4. التشفير الكامل (Full Encryption):',
+            points: [
+              '<strong>التعريف:</strong> تحويل البيانات والملفات إلى رموز وشفرات غير مفهومة لا يستطيع قراءتها إلا الشخص المصرح له الذي يملك مفتاح فك التشفير، مما يحمي بياناتك حتى لو فُقد أو سُرق جهازك.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l4',
+        axis: 2,
+        num: 'الدرس 4',
+        title: 'الأمن السيبراني (Cybersecurity)',
+        subtitle: 'البرمجيات الخبيثة Malware، التخويف Scareware، انتحال الصفة Spoofing',
+        icon: 'fa-shield-halved',
+        summary: 'التعرف على أخطر التهديدات السيبرانية وكيفية التصدي لها ووضع خطة أمان شخصي على الإنترنت.',
+        sections: [
+          {
+            heading: 'ما هو الأمن السيبراني (Cybersecurity)؟',
+            points: [
+              'هو حماية الأنظمة والشبكات والأجهزة والبيانات الرقمية من الهجمات الإلكترونية والاختراق والسرقة والفيروسات.'
+            ]
+          },
+          {
+            heading: 'أخطر التهديدات السيبرانية:',
+            points: [
+              '<strong>1. البرمجيات الخبيثة (Malware):</strong> أخطر التهديدات السيبرانية؛ برامج ضارة تتسلل للجهاز عبر الروابط المشبوهة أو شبكات <strong>Wi-Fi العامة غير المؤمّنة</strong> وتسرق البيانات أو تتلف الملفات.',
+              '<strong>2. برمجيات التخويف (Scareware):</strong> رسائل تحذيرية كاذبة تظهر على الشاشة تخبرك بأن جهازك مصاب بفيروس خطير وتدفعك للضغط على رابط لتحميل برنامج تنظيف (يكون هو الفيروس نفسه).',
+              '<strong>3. انتحال الصفة والتصيد (Spoofing & Phishing):</strong> قيام المحتالين بانتحال شخصية مشهورة أو مؤسسة رسمية أو بنك، وإرسال رسائل تطلب بياناتك السرية أو تدّعي فوزك بجائزة كبرى.'
+            ]
+          },
+          {
+            heading: 'خطوات التعامل مع التهديدات السيبرانية وخطة الأمان الشخصي:',
+            points: [
+              'عدم الضغط على الروابط المجهولة وإغلاق نوافذ التخويف فورًا، وتثبيت وتحديث برامج <strong>مكافحة الفيروسات (Antivirus)</strong>.',
+              'تغيير كلمات المرور كل 3 أشهر، وتفعيل المصادقة متعددة العوامل، وعدم مشاركة البيانات الشخصية، وإبلاغ الوالدين والسلطات المختصة فور التعرّض لأي تهديد.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l5',
+        axis: 2,
+        num: 'الدرس 5',
+        title: 'حقوق الطبع والنشر والتداول المالي الإلكتروني',
+        subtitle: 'الملكية الفكرية، المشاع الإبداعي، البورصة المصرية والوسطاء الماليون',
+        icon: 'fa-scale-unbalanced-flip',
+        summary: 'قوانين حماية الإبداع والملكية الفكرية، ومفهوم البورصة والأسهم والتداول الإلكتروني والمستشارين الآليين.',
+        sections: [
+          {
+            heading: 'أولًا: حقوق الملكية الفكرية ورخص الاستخدام:',
+            points: [
+              '<strong>حقوق الملكية الفكرية (Intellectual Property Rights):</strong> الحماية القانونية لأي عمل جديد ومبتكر يقوم به الشخص بنفسه (اختراع، قصة، لوحة، برنامج) بحيث يظل هو المالك الوحيد لعمله.',
+              '<strong>حقوق الطبع والنشر (Copyright):</strong> تحمي الأعمال الأدبية والفنية والعلمية (كالكتب والأفلام والموسيقى)، ويحميها القانون المصري.',
+              '<strong>المشاع الإبداعي (Creative Commons):</strong> أعمال منح أصحابها إذنًا مسبقًا للآخرين بمشاركتها أو استخدامها وفق شروط محددة (مثل ذكر اسم المؤلف).',
+              '<strong>الملك العام (Public Domain):</strong> أعمال إبداعية انتهت مدة حمايتها القانونية أو تنازل عنها أصحابها، ويمكن للجميع استخدامها مجانًا دون إذن.'
+            ]
+          },
+          {
+            heading: 'ثانيًا: البورصة والتداول المالي الإلكتروني:',
+            points: [
+              '<strong>البورصة (Stock Exchange):</strong> سوق مالية منظمة يتبادل فيها المستثمرون شراء وبيع <strong>الأسهم (Stocks)</strong>.',
+              '<strong>السهم (Stock / Share):</strong> حصة أو جزء صغير من ملكية شركة ما.',
+              '<strong>الوسطاء الماليون (Financial Brokers):</strong> أشخاص أو شركات مرخصة تتولى تنفيذ عمليات شراء وبيع الأسهم نيابة عن المستثمرين.',
+              '<strong>التداول المالي الإلكتروني (E-Trading):</strong> إجراء عمليات شراء وبيع الأسهم عبر الإنترنت بسهولة واستقلالية، وتستخدم فيه تطبيقات ذكية تُسمى <strong>المستشارين الآليين (Robo-Advisors)</strong> تقدم نصائح وتوجيهات استثمارية باستخدام الذكاء الاصطناعي.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l6',
+        axis: 2,
+        num: 'الدرس 6',
+        title: 'التخزين السحابي (Cloud Computing)',
+        subtitle: 'تعريف الحوسبة السحابية، مميزاتها وعيوبها، وأشهر أمثلتها',
+        icon: 'fa-cloud',
+        summary: 'كيف تعمل الحوسبة السحابية، ومقارنة شاملة بين إيجابياتها وسلبياتها، ومفهوم خرق البيانات.',
+        sections: [
+          {
+            heading: 'ما هي الحوسبة السحابية (Cloud Computing)؟',
+            points: [
+              'هي تخزين البيانات والملفات والبرامج والوصول إليها وتشغيلها عبر خوادم بعيدة متصلة بالإنترنت (The Cloud) بدلًا من تخزينها على القرص الصلب (Hard Disk) للجهاز المحلي فقط.',
+              '<strong>أشهر أمثلتها:</strong> <strong>Google Drive</strong> (من جوجل) و <strong>OneDrive</strong> (من مايكروسوفت).'
+            ]
+          },
+          {
+            heading: 'إيجابيات (مميزات) الحوسبة السحابية:',
+            points: [
+              'توفير مساحة تخزينية كبيرة على أجهزتك الشخصية.',
+              'سهولة الوصول لملفاتك من أي جهاز (هاتف أو كمبيوتر) ومن أي مكان في العالم.',
+              'توفير <strong>النسخ الاحتياطي (Backup)</strong> وحماية الملفات من الضياع إذا تعطل جهازك أو سُرق.',
+              'إمكانية مشاركة الملفات والتعاون مع الزملاء في وقت واحد، وتأمينها عبر <strong>تشفير البيانات</strong>.'
+            ]
+          },
+          {
+            heading: 'سلبيات (عيوب) الحوسبة السحابية:',
+            points: [
+              '<strong>تتطلب اتصالًا دائمًا بالإنترنت:</strong> لا يمكن الوصول للملفات السحابية عند انقطاع الإنترنت.',
+              '<strong>مخاطر أمنية وخرق البيانات (Data Breach):</strong> وصول أطراف غير مصرح لها إلى بيانات سرية وسرقتها إذا كانت كلمة المرور ضعيفة.',
+              '<strong>التكلفة الإضافية:</strong> دفع رسوم إضافية عند الحاجة لمساحة تخزين أكبر من المساحة المجانية.'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a2-l7',
+        axis: 2,
+        num: 'الدرس 7',
+        title: 'تطبيقات التخزين السحابي (Cloud Storage Applications)',
+        subtitle: 'خطوات رفع الملفات ومشاركتها وتأمينها على OneDrive و Google Drive',
+        icon: 'fa-cloud-arrow-up',
+        summary: 'التطبيق العملي لاستخدام منصتي Microsoft 365 (OneDrive) و Google Workspace (Google Drive) وصلاحيات المشاركة.',
+        sections: [
+          {
+            heading: 'أشهر منصات الإنتاجية والتخزين السحابي:',
+            points: [
+              '<strong>1. مايكروسوفت 365 (Microsoft 365):</strong> تضم تطبيقات Word و PowerPoint و Excel وتطبيق التخزين السحابي <strong>وان درايف (OneDrive)</strong>.',
+              '<strong>2. جوجل وورك سبيس (Google Workspace):</strong> تضم مستندات جوجل وتطبيق التخزين السحابي <strong>جوجل درايف (Google Drive)</strong>.'
+            ]
+          },
+          {
+            heading: 'خطوات رفع (Upload) ملف أو مجلد على OneDrive:',
+            points: [
+              '1. افتح متصفح الإنترنت وسجّل الدخول إلى حسابك في <strong>Microsoft 365</strong>، ثم اختر أيقونة <strong>OneDrive</strong>.',
+              '2. اضغط على زر <strong>تحميل / رفع (Upload)</strong> ثم اختر <strong>ملفات (Files)</strong> أو <strong>مجلد (Folder)</strong>.',
+              '3. حدد الملفات أو المجلدات من جهازك واضغط على <strong>فتح (Open)</strong>.'
+            ]
+          },
+          {
+            heading: 'مشاركة الملفات وتحديد صلاحيات الوصول (Permissions):',
+            points: [
+              'بعد رفع الملف، اضغط على زر <strong>مشاركة (Share)</strong> وحدد مستوى الوصول للآخرين لحماية ملفاتك:',
+              '• <strong>الاطلاع / العرض فقط (View):</strong> يسمح للآخرين بقراءة الملف دون القدرة على تعديله أو حذفه.',
+              '• <strong>التحرير / التعديل (Edit):</strong> يسمح للآخرين بالتعديل والإضافة على الملف معك.'
+            ]
+          }
+        ]
+      }
+    ];
+
+    // 2. COMPARISONS, HTML TAGS & TERMS DATA
+    const comparisonsData = [
+      {
+        title: 'الواقع الافتراضي (VR) vs الواقع المعزز (AR)',
+        col1Title: 'الواقع الافتراضي (VR)',
+        col2Title: 'الواقع المعزز (AR)',
+        rows: [
+          { aspect: 'المفهوم', c1: 'بيئة افتراضية ثلاثية الأبعاد (3D) تحجب العالم الحقيقي بالكامل.', c2: 'يجمع بين العالم الحقيقي والافتراضي بإضافة عناصر 3D لبيئتك الحقيقية.' },
+          { aspect: 'الأداة المستخدمة', c1: 'يتطلب ارتداء نظارة وسماعات رأس خاصة (VR Headset).', c2: 'يُستخدم عبر كاميرا وشاشة الهاتف الذكي أو الجهاز اللوحي.' },
+          { aspect: 'مثال تطبيقي', c1: 'زيارة متحف بعيد أو السفر عبر الزمن لموقع أثري قديم.', c2: 'رؤية مجسم ثلاثي الأبعاد لقلب الإنسان داخل غرفتك الحقيقية.' }
+        ]
+      },
+      {
+        title: 'المودم (Modem) vs المحولات (Switches) vs الراوتر (Router)',
+        col1Title: 'المودم (Modem)',
+        col2Title: 'المحولات (Switches) والراوتر',
+        rows: [
+          { aspect: 'الوظيفة الأساسية', c1: 'يصل الشبكة المحلية بالإنترنت، ويحوّل إشارة مزود الخدمة (ISP) إلى إشارة رقمية.', c2: 'المحولات: ترسل البيانات لجهاز محدد ومعين لتقليل الازدحام. الراوتر: يوزع الإنترنت سلكيًا ولاسلكيًا (Wi-Fi).' },
+          { aspect: 'الربط', c1: 'يربط منزلك بمزود خدمة الإنترنت الخارجي (ISP).', c2: 'تربط الأجهزة الداخلية ببعضها داخل الشبكة المحلية.' }
+        ]
+      },
+      {
+        title: 'نظام أندرويد (Android) vs نظام آي أو إس (iOS)',
+        col1Title: 'أندرويد (Android)',
+        col2Title: 'آي أو إس (iOS)',
+        rows: [
+          { aspect: 'الشركة المطورة', c1: 'تطوره شركة جوجل وتستخدمه معظم شركات الهواتف الذكية.', c2: 'نظام حصري لشركة آبل (Apple) لهواتف iPhone وأجهزة iPad.' },
+          { aspect: 'نوع الكود البرمجي', c1: 'مفتوح المصدر (Open-Source) يمكن قراءة كوده وتعديله.', c2: 'مغلق المصدر (Closed-Source) لا يمكن تعديل كوده إلا للشركة المالكة.' }
+        ]
+      },
+      {
+        title: 'محركات البحث (Search Engines) vs قواعد البيانات (Databases)',
+        col1Title: 'محركات البحث (مثل Google)',
+        col2Title: 'قواعد البيانات (مثل بنك المعرفة EKB)',
+        rows: [
+          { aspect: 'نطاق البحث', c1: 'تبحث في شبكة الإنترنت العالمية كلها في وقت واحد.', c2: 'تبحث في مجموعة منظمة ومخزنة من المعلومات الموثوقة.' },
+          { aspect: 'الموثوقية', c1: 'قد تحتوي على معلومات غير مؤكدة أو غير دقيقة.', c2: 'نتائجها دقيقة وموثوقة ومراجعة علميًا.' }
+        ]
+      }
+    ];
+
+    const htmlTagsData = [
+      { tag: '<html> ... </html>', name: 'وسم الصفحة الأساسي', desc: 'يحيط بجميع أكواد ومحتويات صفحة الويب من البداية للنهاية.' },
+      { tag: '<head> ... </head>', name: 'رأس الصفحة', desc: 'يحتوي على المعلومات الوصفية للصفحة وعنوانها في المتصفح.' },
+      { tag: '<title> ... </title>', name: 'عنوان الصفحة', desc: 'يُكتب داخل <head> لتحديد اسم الصفحة الظاهر في شريط تبويب المتصفح.' },
+      { tag: '<body> ... </body>', name: 'جسم الصفحة', desc: 'يحتوي على كل المحتوى المرئي للمستخدم (نصوص، عناوين، صور، روابط).' },
+      { tag: '<h1> ... </h1>', name: 'أكبر عنوان رئيسي', desc: 'لإنشاء العنوان الرئيسي الأكبر حجمًا في صفحة الويب.' },
+      { tag: '<h2> ... </h2>', name: 'عنوان فرعي', desc: 'لإنشاء عنوان فرعي أصغر من العنوان الرئيسي <h1>.' },
+      { tag: '<h6> ... </h6>', name: 'أصغر عنوان فرعي', desc: 'لإنشاء أصغر حجم عنوان فرعي في صفحة الويب.' },
+      { tag: '<p> ... </p>', name: 'فقرة نصية (Paragraph)', desc: 'لإضافة فقرات نصية وجمل معلوماتية منظمة.' },
+      { tag: '<strong> ... </strong>', name: 'خط عريض (Bold)', desc: 'لإبراز الكلمات المهمة وجعلها مكتوبة بخط عريض وواضح.' },
+      { tag: '<i> ... </i>', name: 'خط مائل (Italic)', desc: 'لجعل النص مكتوبًا بخط مائل للتركيز على مصطلح أو اقتباس.' },
+      { tag: '<a href="..."> ... </a>', name: 'رابط تشعبي (Hyperlink)', desc: 'لإنشاء رابط ينقل الزائر إلى صفحة أو موقع آخر عند الضغط عليه.' },
+      { tag: '<img src="..." alt="...">', name: 'إدراج صورة (Image)', desc: 'وسم مفرد لإضافة صورة؛ يحدد src مسار الصورة وalt النص البديل لوصفها.' }
+    ];
+
+    const termsData = [
+      { term: 'شبكات الكمبيوتر', en: 'Computer Networks', def: 'مجموعات من الأجهزة أو الأشياء المرتبطة معًا لأهداف مشتركة وتبادل المعلومات والموارد.' },
+      { term: 'المودم', en: 'Modem', def: 'جهاز يصل الشبكة المحلية بالإنترنت ويحول إشارة مزود الخدمة (ISP) إلى إشارة رقمية.' },
+      { term: 'المحولات', en: 'Switches', def: 'أجهزة ذكية ترسل البيانات إلى جهاز معين ومحدد عبر الشبكة لتسريع التواصل.' },
+      { term: 'تجربة المستخدم', en: 'User Experience (UX)', def: 'تصف كيفية تفاعل الشخص مع المنتج التكنولوجي وشعوره تجاهه ومدى سهولته وفائدته.' },
+      { term: 'رموز الاستجابة السريعة', en: 'QR Codes', def: 'مربعات نمطية تُمسح بكاميرا الهاتف للوصول السريع للمواقع والمعلومات.' },
+      { term: 'المصادقة متعددة العوامل', en: 'Multi-Factor Authentication (MFA)', def: 'تأكيد هوية المستخدم بطريقتين مختلفتين على الأقل (كلمة مرور + رمز هاتف أو بصمة).' },
+      { term: 'التشفير الكامل', en: 'Full Encryption', def: 'تحويل البيانات إلى رموز غير مفهومة لا يقرأها إلا الشخص المصرح له بمفتاح فك التشفير.' },
+      { term: 'برمجيات التخويف', en: 'Scareware', def: 'رسائل تحذيرية كاذبة تخبرك بوجود فيروس خطير في جهازك لتدفعك للضغط على رابط ضار.' },
+      { term: 'حقوق الملكية الفكرية', en: 'Intellectual Property Rights', def: 'الحماية القانونية لأي عمل مبتكر يقوم به الشخص بنفسه بحيث يظل مالكه الوحيد.' },
+      { term: 'الحوسبة السحابية', en: 'Cloud Computing', def: 'تخزين البيانات والبرامج والوصول إليها عبر خوادم متصلة بالإنترنت بدلًا من القرص الصلب.' },
+      { term: 'خرق البيانات', en: 'Data Breach', def: 'وصول أطراف غير مصرح لها إلى بيانات سرية أو خاصة وسرقتها أو تسريبها.' }
+    ];
+
+    // 3. INTERACTIVE QUIZ BANK (35 QUESTIONS - MCQ & TRUE/FALSE WITH EXPLANATIONS)
+    const quizQuestions = [
+      // المحور الأول (18 سؤال)
+      { axis: 1, type: 'mcq', q: 'ابتكر العالم كارتيك ساوني برمجيات تحوّل الرسوم البيانية إلى ................ لمساعدة المكفوفين على فهمها.', options: ['صور ملونة', 'ترددات صوتية', 'مقاطع فيديو', 'رموز QR'], ans: 1, exp: 'ابتكر كارتيك ساوني برمجيات تحوّل الرسوم البيانية إلى ترددات صوتية ليتمكن المكفوفون من سماعها وفهمها.' },
+      { axis: 1, type: 'tf', q: 'تساعد منصة I-Stem المكفوفين وضعاف البصر على الوصول للنصوص الرقمية وتوفر لهم فرص الإرشاد والتوظيف.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ شارك كارتيك ساوني في تأسيس منصة I-Stem لدعم ذوي الهمم.' },
+      { axis: 1, type: 'mcq', q: 'الجهاز الذي يحوّل الإشارة القادمة من مزود خدمة الإنترنت (ISP) إلى إشارة رقمية تفهمها الأجهزة هو ................', options: ['الراوتر', 'المودم (Modem)', 'المحول (Switch)', 'المنفذ (Port)'], ans: 1, exp: 'المودم (Modem) هو المسؤول عن تحويل الإشارة المستقبلة من مزود الخدمة (ISP) إلى إشارة رقمية.' },
+      { axis: 1, type: 'mcq', q: 'أجهزة ذكية تُرسل البيانات إلى جهاز معين ومحدد عبر الشبكة لتقليل الازدحام وتسريع التواصل هي ................', options: ['المحولات (Switches)', 'المنافذ (Ports)', 'الطابعات', 'القارئات الإلكترونية'], ans: 0, exp: 'المحولات (Switches) توجه البيانات إلى الجهاز المقصود تحديدًا داخل الشبكة.' },
+      { axis: 1, type: 'tf', q: 'تُعتبر الشبكة المحلية (LAN) المتصلة بالكابلات في معمل المدرسة مثالًا على الشبكات اللاسلكية.', options: ['صح ✔', 'خطأ ✖'], ans: 1, exp: 'عبارة خاطئة؛ الشبكة المحلية (LAN) المتصلة بالكابلات هي مثال على الشبكات السلكية (Wired).' },
+      { axis: 1, type: 'mcq', q: 'تقنية تجمع بين العالم الحقيقي والواقع الافتراضي بإضافة نماذج ثلاثية الأبعاد عبر شاشة الهاتف هي ................', options: ['الواقع الافتراضي (VR)', 'الواقع المعزز (AR)', 'البلوتوث', 'التشفير'], ans: 1, exp: 'الواقع المعزز (AR) يدمج العناصر الرقمية ثلاثية الأبعاد مع بيئتك الحقيقية عبر كاميرا الهاتف.' },
+      { axis: 1, type: 'tf', q: 'يتطلب التعامل مع تقنية الواقع الافتراضي (VR) ارتداء نظارة وسماعات رأس خاصة تحجب العالم الحقيقي.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ نظارة VR توفر بيئة افتراضية ثلاثية الأبعاد بزاوية 360 درجة.' },
+      { axis: 1, type: 'mcq', q: 'فتح الهاتف المحمول بواسطة نظام التعرف على الوجه يُعد تطبيقًا عمليًا لتقنية ................', options: ['الذكاء الاصطناعي (AI)', 'الشبكات السلكية', 'المودم', 'القارئات الإلكترونية'], ans: 0, exp: 'التعرف على الوجه وتوقع الكلمات من أبرز تطبيقات الذكاء الاصطناعي (AI).' },
+      { axis: 1, type: 'mcq', q: 'تُستخدم القفازات الذكية (Smart Gloves) لمساعدة ذوي الإعاقة السمعية عن طريق ترجمة ................ فورًا.', options: ['لغة برايل', 'لغة الإشارة إلى نص أو كلام', 'الأكواد البرمجية', 'الرسوم البيانية'], ans: 1, exp: 'القفازات الذكية تترجم إشارات لغة الإشارة فورًا إلى نص مكتوب أو كلام منطوق.' },
+      { axis: 1, type: 'tf', q: 'تصف «تجربة المستخدم (UX)» كيفية تفاعل الشخص مع المنتج التكنولوجي وشعوره تجاهه ومدى سهولته.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ وترتبط تجربة المستخدم ارتباطًا وثيقًا بتطوير المنتجات وتحسينها.' },
+      { axis: 1, type: 'mcq', q: 'للحصول على نتائج بحث تحتوي على الكلمتين معًا وتضييق نطاق البحث، نستخدم معامل البحث المنطقي ................', options: ['OR', 'AND', 'NOT', 'ALT'], ans: 1, exp: 'معامل البحث AND يجمع بين الكلمتين معًا فيظهر النتائج التي تتضمنهما معًا.' },
+      { axis: 1, type: 'mcq', q: 'لصق نص قمت بنسخه مسبقًا، نضغط على مفتاحي ................ معًا من لوحة المفاتيح.', options: ['Ctrl + C', 'Ctrl + X', 'Ctrl + V', 'Ctrl + A'], ans: 2, exp: 'Ctrl + V هو اختصار اللصق (Paste)، بينما Ctrl + C للنسخ و Ctrl + X للقص.' },
+      { axis: 1, type: 'tf', q: 'يُعد بنك المعرفة المصري (EKB) وفهرس مكتبة الإسكندرية من قواعد البيانات الموثوقة.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ قواعد البيانات توفر معلومات منظمة ومراجعة وموثوقة.' },
+      { axis: 1, type: 'mcq', q: 'مربعات نمطية تُمسح بكاميرا الهاتف للوصول السريع إلى المواقع والمعلومات تُسمّى ................', options: ['رموز الاستجابة السريعة (QR)', 'المحولات', 'الوسوم', 'الأسهم'], ans: 0, exp: 'رموز الاستجابة السريعة (QR Codes) تتيح فتح الروابط والمعلومات فور مسحها بالكاميرا.' },
+      { axis: 1, type: 'mcq', q: 'نظام تشغيل الهواتف الذكية مفتوح المصدر والأكثر انتشارًا عالميًا هو ................', options: ['iOS', 'Windows', 'Android', 'macOS'], ans: 2, exp: 'نظام Android نظام مفتوح المصدر للهواتف الذكية، بينما iOS و Windows و macOS أنظمة مغلقة المصدر.' },
+      { axis: 1, type: 'tf', q: 'تُعتبر أنظمة تشغيل Windows و iOS من أنظمة التشغيل مفتوحة المصدر التي يمكن لأي شخص تعديل كودها.', options: ['صح ✔', 'خطأ ✖'], ans: 1, exp: 'عبارة خاطئة؛ Windows و iOS أنظمة مغلقة المصدر لا يمكن تعديل كودها إلا للشركة المالكة فقط.' },
+      { axis: 1, type: 'mcq', q: 'الوسم المسؤول عن إضافة أكبر عنوان رئيسي في صفحة الويب بلغة HTML هو ................', options: ['<h6>', '<h1>', '<p>', '<title>'], ans: 1, exp: '<h1> هو أكبر عنوان رئيسي، وتتدرج العناوين حتى <h6> الأصغر.' },
+      { axis: 1, type: 'mcq', q: 'لجعل النص مهمًا ومكتوبًا بخط عريض (Bold) في لغة HTML نستخدم الوسم ................', options: ['<i>', '<strong>', '<img>', '<a>'], ans: 1, exp: 'وسم <strong> يجعل النص بخط عريض، بينما <i> يجعله مائلًا.' },
+
+      // المحور الثاني (17 سؤال)
+      { axis: 2, type: 'tf', q: 'تعمل باحثة الأمن الرقمي ديانا ديموترو على توعية الأفراد بكيفية حماية بياناتهم الشخصية وخصوصيتهم عبر الإنترنت.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ ديانا ديموترو باحثة متخصصة في الأمن الرقمي وحماية البيانات.' },
+      { axis: 2, type: 'mcq', q: 'إجهاد العينين وآلام الظهر واضطرابات النوم نتيجة الإفراط في الألعاب الإلكترونية تُعد من المخاطر ................', options: ['الجسدية', 'الأمنية', 'المالية', 'القانونية'], ans: 0, exp: 'إجهاد العين وآلام الرقبة والظهر واضطرابات النوم هي مخاطر جسدية مباشرة.' },
+      { axis: 2, type: 'mcq', q: 'مشاركة اسمك الكامل وعنوانك مع غرباء داخل الألعاب الجماعية يعرضك للمخاطر ................', options: ['الجسدية', 'الأمنية', 'الرياضية', 'التعليمية'], ans: 1, exp: 'مشاركة البيانات الشخصية مع غرباء تعرضك لخطر الاختراق وسرقة الحسابات والتنمر (مخاطر أمنية).' },
+      { axis: 2, type: 'tf', q: 'يجب ألا يقل طول كلمة المرور القوية والآمنة عن 8 أحرف/خانات وتجمع بين حروف وأرقام ورموز.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ التنويع وطول كلمة المرور (8 خانات فأكثر) يحمي الحساب من التخمين.' },
+      { axis: 2, type: 'mcq', q: 'تتطلب المصادقة متعددة العوامل (MFA) ................ لتأكيد هوية المستخدم عند تسجيل الدخول.', options: ['كلمة مرور فقط', 'طريقتين مختلفتين على الأقل', 'اسم المستخدم فقط', 'رقم الهاتف فقط'], ans: 1, exp: 'المصادقة متعددة العوامل (MFA) تتطلب طريقتين على الأقل (مثل كلمة مرور + رمز تحقق مؤقت OTP).' },
+      { axis: 2, type: 'mcq', q: 'عملية تحويل البيانات إلى رموز غير مفهومة لا يقرأها إلا الشخص المصرح له تُسمّى ................', options: ['التشفير الكامل', 'التصيد الإلكتروني', 'النسخ الاحتياطي', 'التداول'], ans: 0, exp: 'التشفير الكامل يحمي البيانات بتحويلها لشفرات غير مقروءة حتى لو سُرق الجهاز.' },
+      { axis: 2, type: 'tf', q: 'يُعد استخدام شبكات الواي فاي (Wi-Fi) العامة غير المؤمّنة وسيلة آمنة تمامًا لإدخال كلمات المرور البنكية.', options: ['صح ✔', 'خطأ ✖'], ans: 1, exp: 'عبارة خاطئة؛ شبكات Wi-Fi العامة غير الآمنة تسهل تسلل البرمجيات الخبيثة وسرقة البيانات.' },
+      { axis: 2, type: 'mcq', q: 'تحذيرات كاذبة تظهر على الشاشة تخبرك أن جهازك مصاب بفيروس خطير وتطلب الضغط على رابط تُسمّى ................', options: ['برمجيات التخويف (Scareware)', 'الحوسبة السحابية', 'المشاع الإبداعي', 'قواعد البيانات'], ans: 0, exp: 'برمجيات التخويف (Scareware) تخدع المستخدم بتحذير مزيف لدفعه للضغط على رابط ضار.' },
+      { axis: 2, type: 'mcq', q: 'قيام محتال بانتحال شخصية بنك أو مؤسسة رسمية لسرقة بياناتك السرية يُعرف بـ ................', options: ['انتحال الصفة والتصيد (Spoofing)', 'التشفير', 'الملك العام', 'التخزين السحابي'], ans: 0, exp: 'انتحال الصفة (Spoofing) هو تظاهر المحتال بهوية جهة موثوقة لخداع الضحية.' },
+      { axis: 2, type: 'tf', q: 'الحماية القانونية لأي عمل مبتكر يقوم به الشخص بنفسه بحيث يظل مالكه الوحيد تُسمّى حقوق الملكية الفكرية.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ حقوق الملكية الفكرية تحمي المبدعين والمخترعين والمؤلفين.' },
+      { axis: 2, type: 'mcq', q: 'الأعمال الإبداعية التي انتهت مدة حمايتها القانونية ويمكن للجميع استخدامها مجانًا دون إذن هي ................', options: ['الملك العام (Public Domain)', 'التشفير الكامل', 'البرمجيات الخبيثة', 'الأسهم'], ans: 0, exp: 'الملك العام (Public Domain) متاح للاستخدام المجاني للجميع دون قيود.' },
+      { axis: 2, type: 'mcq', q: 'تطبيقات ذكية عبر الإنترنت تستخدم الذكاء الاصطناعي لتقديم نصائح وتوجيهات استثمارية في البورصة هي ................', options: ['المستشارون الآليون (Robo-Advisors)', 'قارئات الشاشة', 'المحولات', 'القفازات الذكية'], ans: 0, exp: 'المستشارون الآليون (Robo-Advisors) يقدمون النصائح المالية والاستثمارية عبر خوارزميات الذكاء الاصطناعي.' },
+      { axis: 2, type: 'tf', q: 'يمثل «السهم» في البورصة حصة أو جزءًا صغيرًا من ملكية شركة ما.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ شراء الأسهم يجعلك شريكًا بحصة في الشركة.' },
+      { axis: 2, type: 'mcq', q: 'تخزين الملفات والوصول إليها عبر خوادم بعيدة متصلة بالإنترنت بدلًا من القرص الصلب يُسمّى ................', options: ['الحوسبة السحابية', 'الشبكة السلكية', 'المصادقة البيومترية', 'انتحال الصفة'], ans: 0, exp: 'الحوسبة السحابية تتيح حفظ الملفات وتشغيلها عبر الإنترنت (مثل OneDrive و Google Drive).' },
+      { axis: 2, type: 'tf', q: 'من عيوب الحوسبة السحابية أنها تتطلب اتصالًا دائمًا بالإنترنت للوصول إلى الملفات المخزنة عليها.', options: ['صح ✔', 'خطأ ✖'], ans: 0, exp: 'عبارة صحيحة؛ في حال انقطاع الإنترنت يتعذر الوصول للملفات السحابية.' },
+      { axis: 2, type: 'mcq', q: 'وصول أشخاص غير مصرح لهم إلى بياناتك السرية المخزنة على السحابة وسرقتها يُسمّى ................', options: ['خرق البيانات (Data Breach)', 'النسخ الاحتياطي', 'المشاع الإبداعي', 'التشفير'], ans: 0, exp: 'خرق البيانات (Data Breach) هو تسريب أو سرقة البيانات السرية من قبل أطراف غير مصرح لها.' },
+      { axis: 2, type: 'mcq', q: 'إذا أردت مشاركة ملف على OneDrive ليقرأه زملاؤك فقط دون تعديله، تختار صلاحية ................', options: ['العرض/الاطلاع فقط (View)', 'التحرير (Edit)', 'الحذف (Delete)', 'التشفير'], ans: 0, exp: 'صلاحية View تتيح القراءة والاطلاع فقط، بينما Edit تسمح بالتعديل.' }
+    ];
+
+    // 4. ESSAY QUESTIONS BANK (20 QUESTIONS WITH MODEL ANSWERS)
+    const essayQuestions = [
+      { type: 'define', q: 'ما المقصود بشبكات الكمبيوتر (Computer Networks)؟', a: 'هي مجموعات من الأجهزة أو الأشياء المرتبطة معًا لأهداف مشتركة مثل تبادل المعلومات والبيانات ومشاركة الملفات والموارد.' },
+      { type: 'function', q: 'اذكر وظيفة كلٍّ من: المودم (Modem) والمحولات (Switches).', a: '• المودم: يصل الشبكة المحلية بالإنترنت ويحول الإشارة القادمة من مزود الخدمة (ISP) إلى إشارة رقمية.\n• المحولات: ترسل البيانات إلى جهاز معين ومحدد عبر الشبكة لتقليل الازدحام وتسريع التواصل.' },
+      { type: 'define', q: 'ما الفرق بين الواقع الافتراضي (VR) والواقع المعزز (AR)؟', a: '• الواقع الافتراضي (VR): بيئة افتراضية ثلاثية الأبعاد (3D) تحجب العالم الحقيقي وتتطلب ارتداء نظارة خاصة.\n• الواقع المعزز (AR): يجمع بين العالم الحقيقي والافتراضي بإضافة نماذج ثلاثية الأبعاد لبيئتك الحقيقية عبر كاميرا الهاتف.' },
+      { type: 'reason', q: 'بم تفسر: أهمية التكنولوجيا المساعدة لذوي الاحتياجات الخاصة؟', a: 'لأنها تساعدهم في أداء المهام التي يجدون صعوبة في القيام بها بمفردهم، مما يعزز استقلاليتهم ويدمجهم في المجتمع (مثل القفازات الذكية ولوحة مفاتيح برايل).' },
+      { type: 'define', q: 'ما المقصود بتجربة المستخدم (User Experience - UX)؟', a: 'تصف كيفية استخدام الشخص للمنتج التكنولوجي والتفاعل معه، وتقييم مدى سهولته وفائدته وشعوره تجاهه.' },
+      { type: 'reason', q: 'علل: تُعد قواعد البيانات (مثل بنك المعرفة المصري) أفضل من محركات البحث العامة في الأبحاث العلمية؟', a: 'لأن قواعد البيانات تضم معلومات منظمة ومراجعة علميًا، مما يجعل نتائجها دقيقة وموثوقة، عكس محركات البحث العامة التي قد تحتوي على معلومات غير مؤكدة.' },
+      { type: 'function', q: 'وضح وظيفة معاملات البحث المنطقي: (AND - OR - NOT).', a: '• AND: تجمع بين الكلمات فتظهر النتائج التي تشمل جميع الكلمات (تضيق البحث).\n• OR: تظهر النتائج التي تشمل إحدى الكلمات أو جميعها (توسع البحث).\n• NOT: تستبعد الكلمة التي تليها من نتائج البحث.' },
+      { type: 'define', q: 'ما المقصود برموز الاستجابة السريعة (QR Codes)؟ وما فائدتها؟', a: 'هي مربعات نمطية تحتوي على نقاط وخطوط سوداء وبيضاء، تُمسح بكاميرا الهاتف للوصول السريع إلى المواقع والمعلومات دون كتابة روابط طويلة.' },
+      { type: 'define', q: 'قارن بين أنظمة التشغيل مفتوحة المصدر ومغلقة المصدر مع ذكر مثال لكلٍّ منهما.', a: '• مفتوحة المصدر: يمكن لأي شخص قراءة الكود البرمجي وتعديله (مثل Android و Linux).\n• مغلقة المصدر: لا يمكن رؤية الكود أو تعديله إلا للشركة المالكة فقط (مثل Windows و iOS).' },
+      { type: 'function', q: 'اذكر وظيفة وسوم HTML التالية: (<title> ، <h1> ، <p> ، <img>).', a: '• <title>: تحديد عنوان صفحة الويب في تبويب المتصفح.\n• <h1>: إنشاء أكبر عنوان رئيسي في الصفحة.\n• <p>: إنشاء فقرة نصية.\n• <img>: إضافة صورة إلى صفحة الويب.' },
+      { type: 'reason', q: 'بم تفسر: يُنصح بتقسيم محتوى صفحة الويب إلى عناوين رئيسية وفرعية وفقرات؟', a: 'لتسهيل القراءة والبحث البصري على الزائر، وجعل الصفحة منظمة وجذابة.' },
+      { type: 'function', q: 'اذكر ثلاثة من المخاطر التي يسببها الإفراط في الألعاب الإلكترونية.', a: '1. مخاطر جسدية: إجهاد العينين وآلام الظهر واضطرابات النوم.\n2. مخاطر نفسية: القلق والعزلة وتوليد مشاعر عدوانية.\n3. مخاطر أمنية: مشاركة البيانات الشخصية مع غرباء والتعرض للتنمر أو الاختراق.' },
+      { type: 'function', q: 'اذكر ثلاث قواعد للعب الآمن والمسؤول في الألعاب الإلكترونية.', a: '1. تحديد وقت للعب والالتزام به مع أخذ فترات راحة منتظمة.\n2. عدم مشاركة المعلومات الشخصية أو الصور مع الغرباء واستخدام لقب مستعار.\n3. حظر المتنمرين والإبلاغ عنهم وإخبار الوالدين عند حدوث أي مشكلة.' },
+      { type: 'define', q: 'ما المقصود بالمصادقة متعددة العوامل (MFA)؟', a: 'هي طبقة حماية إضافية تتطلب طريقتين مختلفتين على الأقل لتأكيد هوية المستخدم عند تسجيل الدخول (مثل كلمة المرور + رمز تحقق مؤقت OTP).' },
+      { type: 'define', q: 'ما المقصود بالتشفير الكامل (Full Encryption)؟', a: 'هو تحويل البيانات والملفات إلى رموز وشفرات غير مفهومة لا يستطيع قراءتها إلا الشخص المصرح له الذي يملك مفتاح فك التشفير.' },
+      { type: 'define', q: 'ما الفرق بين برمجيات التخويف (Scareware) وانتحال الصفة (Spoofing)؟', a: '• برمجيات التخويف: رسائل تحذيرية كاذبة تدّعي إصابة جهازك بفيروس لتدفعك للضغط على رابط ضار.\n• انتحال الصفة: تظاهر المحتال بهوية بنك أو جهة موثوقة لخداعك وسرقة بياناتك.' },
+      { type: 'define', q: 'ما الفرق بين المشاع الإبداعي (Creative Commons) والملك العام (Public Domain)؟', a: '• المشاع الإبداعي: أعمال منح أصحابها إذنًا مسبقًا بمشاركتها وفق شروط محددة (كذكر اسم المؤلف).\n• الملك العام: أعمال انتهت مدة حمايتها القانونية ويمكن استخدامها مجانًا بدون إذن.' },
+      { type: 'define', q: 'ما المقصود بالبورصة (Stock Exchange) والمستشارين الآليين (Robo-Advisors)؟', a: '• البورصة: سوق مالية منظمة يتبادل فيها المستثمرون شراء الأسهم وبيعها.\n• المستشارون الآليون: تطبيقات ذكية تستخدم الذكاء الاصطناعي لتقديم نصائح وتوجيهات استثمارية.' },
+      { type: 'reason', q: 'اذكر ميزتين وعيبين للحوسبة السحابية (Cloud Computing).', a: '• المميزات: 1) توفير مساحة على الجهاز. 2) الوصول للملفات من أي مكان وأي جهاز وتوفير نسخة احتياطية.\n• العيوب: 1) تتطلب اتصالًا دائمًا بالإنترنت. 2) خطر خرق البيانات إذا كانت كلمة المرور ضعيفة.' },
+      { type: 'function', q: 'اذكر خطوات رفع (Upload) ملف على تطبيق OneDrive.', a: '1. تسجيل الدخول إلى حساب Microsoft 365 واختيار أيقونة OneDrive.\n2. الضغط على زر تحميل/رفع (Upload) واختيار ملفات (Files) أو مجلد (Folder).\n3. تحديد الملف من الجهاز والضغط على فتح (Open).' }
+    ];
+
+    // ==========================================
+    // STATE MANAGEMENT (LOCALSTORAGE)
+    // ==========================================
+    let state = {
+      completedLessons: JSON.parse(localStorage.getItem('nari_completed_lessons') || '[]'),
+      points: parseInt(localStorage.getItem('nari_points') || '0', 10),
+      studentName: localStorage.getItem('nari_student_name') || '',
+      axisFilter: 'all',
+      compareSub: 'comparisons',
+      essayFilter: 'all'
+    };
+
+    function saveState() {
+      localStorage.setItem('nari_completed_lessons', JSON.stringify(state.completedLessons));
+      localStorage.setItem('nari_points', state.points.toString());
+      localStorage.setItem('nari_student_name', state.studentName);
+      updateTopProgress();
+    }
+
+    function updateTopProgress() {
+      const total = lessonsData.length;
+      const done = state.completedLessons.length;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('completed-count').textContent = done;
+      document.getElementById('progress-percent').textContent = pct + '%';
+      document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('header-points').textContent = state.points;
+    }
+
+    // ==========================================
+    // NAVIGATION TABS
+    // ==========================================
+    function switchTab(tabName) {
+      ['lessons', 'compare', 'quiz', 'essay'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        const navBtn = document.getElementById('nav-' + t);
+        navBtn.classList.remove('text-red-800', 'font-extrabold');
+        navBtn.classList.add('text-slate-400', 'font-semibold');
+      });
+
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('nav-' + tabName);
+      activeBtn.classList.remove('text-slate-400', 'font-semibold');
+      activeBtn.classList.add('text-red-800', 'font-extrabold');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // RENDER LESSONS (TAB 1)
+    // ==========================================
+    function setAxisFilter(axis) {
+      state.axisFilter = axis;
+      document.querySelectorAll('.axis-btn').forEach(btn => {
+        btn.classList.remove('bg-red-800', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      const active = document.getElementById('filter-' + axis);
+      active.classList.remove('bg-slate-100', 'text-slate-700');
+      active.classList.add('bg-red-800', 'text-white', 'shadow-sm');
+      renderLessons();
+    }
+
+    function filterLessons() {
+      renderLessons();
+    }
+
+    function toggleLessonComplete(lessonId, event) {
+      event.stopPropagation();
+      const idx = state.completedLessons.indexOf(lessonId);
+      if (idx === -1) {
+        state.completedLessons.push(lessonId);
+        state.points += 10;
+      } else {
+        state.completedLessons.splice(idx, 1);
+        state.points = Math.max(0, state.points - 10);
+      }
+      saveState();
+      renderLessons();
+    }
+
+    function toggleAccordion(lessonId) {
+      const body = document.getElementById('body-' + lessonId);
+      const chevron = document.getElementById('chev-' + lessonId);
+      body.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    function renderLessons() {
+      const query = document.getElementById('lesson-search').value.trim().toLowerCase();
+      const container = document.getElementById('lessons-container');
+      container.innerHTML = '';
+
+      const filtered = lessonsData.filter(lesson => {
+        const matchAxis = state.axisFilter === 'all' || lesson.axis === state.axisFilter;
+        if (!matchAxis) return false;
+        if (!query) return true;
+        const fullText = (
+          lesson.title + ' ' +
+          lesson.subtitle + ' ' +
+          lesson.summary + ' ' +
+          lesson.sections.map(s => s.heading + ' ' + s.points.join(' ')).join(' ')
+        ).toLowerCase();
+        return fullText.includes(query);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white p-8 rounded-3xl text-center border border-slate-100">
+            <i class="fa-solid fa-magnifying-glass text-3xl text-slate-300 mb-2"></i>
+            <p class="text-sm font-bold text-slate-600">لا توجد نتائج مطابقة لبحثك «${query}»</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(lesson => {
+        const isDone = state.completedLessons.includes(lesson.id);
+        const axisBadge = lesson.axis === 1
+          ? '<span class="text-[10px] font-bold bg-red-50 text-red-800 px-2 py-0.5 rounded-full border border-red-200">المحور الأول</span>'
+          : '<span class="text-[10px] font-bold bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200">المحور الثاني</span>';
+
+        const sectionsHtml = lesson.sections.map(sec => `
+          <div class="bg-slate-50/80 rounded-2xl p-3.5 border border-slate-100 space-y-2">
+            <h4 class="font-extrabold text-sm text-red-900 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-orange-500 inline-block"></span>
+              ${sec.heading}
+            </h4>
+            <ul class="space-y-1.5 text-xs sm:text-sm text-slate-700 leading-relaxed pr-3">
+              ${sec.points.map(p => `<li class="relative pr-3 before:content-['•'] before:absolute before:right-0 before:text-red-600 before:font-bold">${p}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-3xl card-shadow border transition ${isDone ? 'border-emerald-300 bg-emerald-50/10' : 'border-slate-100'}`;
+        card.innerHTML = `
+          <div onclick="toggleAccordion('${lesson.id}')" class="p-4 cursor-pointer flex items-center justify-between gap-3 select-none">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-11 h-11 rounded-2xl ${lesson.axis === 1 ? 'bg-red-100 text-red-800' : 'bg-orange-100 text-orange-800'} flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid ${lesson.icon}"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                  ${axisBadge}
+                  <span class="text-[11px] font-extrabold text-slate-500">${lesson.num}</span>
+                  ${isDone ? '<span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">تمت المذاكرة ✔</span>' : ''}
+                </div>
+                <h3 class="font-extrabold text-sm sm:text-base text-slate-900 truncate">${lesson.title}</h3>
+                <p class="text-[11px] text-slate-500 truncate">${lesson.subtitle}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="toggleLessonComplete('${lesson.id}', event)" class="w-9 h-9 rounded-xl border flex items-center justify-center transition ${isDone ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-400 hover:border-emerald-500 hover:text-emerald-600'}" title="${isDone ? 'إلغاء تحديد كمكتمل' : 'تحديد الدرس كمكتمل (+10 نقاط)'}">
+                <i class="fa-solid fa-check text-sm"></i>
+              </button>
+              <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center">
+                <i id="chev-${lesson.id}" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+              </div>
+            </div>
+          </div>
+
+          <div id="body-${lesson.id}" class="hidden px-4 pb-4 pt-1 border-t border-slate-100 space-y-3">
+            <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3 text-xs text-amber-950 font-medium">
+              <strong>ملخص الفكرة:</strong> ${lesson.summary}
+            </div>
+            ${sectionsHtml}
+            <div class="pt-1 flex justify-end">
+              <button onclick="toggleLessonComplete('${lesson.id}', event)" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${isDone ? 'bg-emerald-100 text-emerald-800' : 'fire-gradient text-white shadow'}">
+                <i class="fa-solid ${isDone ? 'fa-circle-check' : 'fa-award'}"></i>
+                ${isDone ? 'أتممت مذاكرة هذا الدرس بنجاح' : 'أتممت مذاكرة الدرس (+10 نقاط)'}
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // RENDER COMPARISONS, HTML TAGS & TERMS (TAB 2)
+    // ==========================================
+    function switchCompareSub(sub) {
+      state.compareSub = sub;
+      ['comparisons', 'html', 'terms'].forEach(s => {
+        const btn = document.getElementById('sub-btn-' + s);
+        btn.classList.remove('bg-red-800', 'text-white');
+        btn.classList.add('text-slate-600');
+      });
+      const active = document.getElementById('sub-btn-' + sub);
+      active.classList.remove('text-slate-600');
+      active.classList.add('bg-red-800', 'text-white');
+      renderCompareTab();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderCompareTab() {
+      const q = document.getElementById('compare-search').value.trim().toLowerCase();
+      const container = document.getElementById('compare-content');
+      container.innerHTML = '';
+
+      if (state.compareSub === 'comparisons') {
+        const list = comparisonsData.filter(c =>
+          !q || c.title.toLowerCase().includes(q) || c.rows.some(r => (r.aspect + r.c1 + r.c2).toLowerCase().includes(q))
+        );
+        list.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'bg-white rounded-3xl card-shadow border border-slate-100 overflow-hidden';
+          card.innerHTML = `
+            <div class="fire-gradient text-white px-4 py-3 font-extrabold text-sm">
+              ${item.title}
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs sm:text-sm text-right border-collapse">
+                <thead>
+                  <tr class="bg-red-50 text-red-950 border-b border-red-100">
+                    <th class="p-3 font-extrabold w-1/5">وجه المقارنة</th>
+                    <th class="p-3 font-extrabold w-2/5">${item.col1Title}</th>
+                    <th class="p-3 font-extrabold w-2/5">${item.col2Title}</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${item.rows.map(r => `
+                    <tr class="hover:bg-slate-50/70">
+                      <td class="p-3 font-bold text-slate-800 bg-slate-50/50">${r.aspect}</td>
+                      <td class="p-3 text-slate-700 leading-relaxed">${r.c1}</td>
+                      <td class="p-3 text-slate-700 leading-relaxed">${r.c2}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } else if (state.compareSub === 'html') {
+        const list = htmlTagsData.filter(t =>
+          !q || (t.tag + ' ' + t.name + ' ' + t.desc).toLowerCase().includes(q)
+        );
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+        list.forEach(t => {
+          const item = document.createElement('div');
+          item.className = 'bg-white p-4 rounded-3xl card-shadow border border-slate-100 flex flex-col justify-between gap-2';
+          item.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-extrabold text-xs text-red-900">${t.name}</span>
+              <code class="code-snippet bg-slate-900 text-amber-300 px-2.5 py-1 rounded-xl text-xs font-bold">${escapeHtml(t.tag)}</code>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">${t.desc}</p>
+          `;
+          grid.appendChild(item);
+        });
+        container.appendChild(grid);
+      } else {
+        const list = termsData.filter(t =>
+          !q || (t.term + ' ' + t.en + ' ' + t.def).toLowerCase().includes(q)
+        );
+        list.forEach(t => {
+          const card = document.createElement('div');
+          card.className = 'bg-white p-4 rounded-3xl card-shadow border border-slate-100 space-y-1';
+          card.innerHTML = `
+            <div class="flex items-center justify-between flex-wrap gap-1">
+              <h4 class="font-extrabold text-sm text-red-900">${t.term}</h4>
+              <span class="en-badge text-xs font-bold bg-blue-50 text-blue-800 px-2.5 py-0.5 rounded-full border border-blue-200">${t.en}</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${t.def}</p>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    // ==========================================
+    // INTERACTIVE QUIZ ENGINE (TAB 3)
+    // ==========================================
+    let currentQuizList = [];
+    let currentQIndex = 0;
+    let quizScore = 0;
+    let answeredCurrent = false;
+
+    function startQuiz(axisChoice) {
+      const nameVal = document.getElementById('student-name-input').value.trim();
+      if (nameVal) {
+        state.studentName = nameVal;
+        saveState();
+      }
+
+      if (axisChoice === 'all') {
+        currentQuizList = [...quizQuestions];
+      } else {
+        currentQuizList = quizQuestions.filter(q => q.axis === axisChoice);
+      }
+
+      currentQIndex = 0;
+      quizScore = 0;
+      answeredCurrent = false;
+
+      document.getElementById('quiz-start-card').classList.add('hidden');
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('quiz-arena').classList.remove('hidden');
+
+      document.getElementById('q-total').textContent = currentQuizList.length;
+      document.getElementById('q-score').textContent = '0';
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      answeredCurrent = false;
+      const qObj = currentQuizList[currentQIndex];
+      const total = currentQuizList.length;
+
+      document.getElementById('q-current').textContent = currentQIndex + 1;
+      document.getElementById('q-progress-bar').style.width = `${((currentQIndex) / total) * 100}%`;
+      document.getElementById('q-badge').textContent = qObj.type === 'mcq' ? 'اختر الإجابة الصحيحة' : 'ضع علامة صح أو خطأ';
+      document.getElementById('q-axis-badge').textContent = qObj.axis === 1 ? 'المحور الأول' : 'المحور الثاني';
+      document.getElementById('q-text').textContent = qObj.q;
+
+      const expBox = document.getElementById('q-explanation');
+      expBox.classList.add('hidden');
+      document.getElementById('q-next-btn').classList.add('hidden');
+
+      const optionsBox = document.getElementById('q-options');
+      optionsBox.innerHTML = '';
+
+      qObj.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-right p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-red-50 hover:border-red-300 font-bold text-sm text-slate-800 transition flex items-center justify-between';
+        btn.innerHTML = `<span>${opt}</span><span class="opt-icon"></span>`;
+        btn.onclick = () => selectAnswer(idx, btn);
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(selectedIdx, clickedBtn) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const qObj = currentQuizList[currentQIndex];
+      const allBtns = document.getElementById('q-options').querySelectorAll('button');
+      const isCorrect = selectedIdx === qObj.ans;
+
+      allBtns.forEach((b, idx) => {
+        b.disabled = true;
+        b.classList.remove('hover:bg-red-50', 'hover:border-red-300');
+        if (idx === qObj.ans) {
+          b.classList.remove('border-slate-200', 'bg-slate-50');
+          b.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+          b.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>';
+        } else if (idx === selectedIdx && !isCorrect) {
+          b.classList.remove('border-slate-200', 'bg-slate-50');
+          b.classList.add('border-red-500', 'bg-red-50', 'text-red-900');
+          b.querySelector('.opt-icon').innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600 text-lg"></i>';
+        }
+      });
+
+      const expBox = document.getElementById('q-explanation');
+      expBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-red-50', 'border-red-200', 'text-red-900');
+
+      if (isCorrect) {
+        quizScore++;
+        state.points += 5;
+        saveState();
+        document.getElementById('q-score').textContent = quizScore;
+        expBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+        expBox.innerHTML = `<strong>أحسنت! إجابة صحيحة (+5 نقاط):</strong> ${qObj.exp}`;
+      } else {
+        expBox.classList.add('bg-red-50', 'border-red-200', 'text-red-900');
+        expBox.innerHTML = `<strong>إجابة غير صحيحة — التوضيح:</strong> ${qObj.exp}`;
+      }
+
+      const nextBtn = document.getElementById('q-next-btn');
+      nextBtn.classList.remove('hidden');
+      nextBtn.innerHTML = currentQIndex === currentQuizList.length - 1
+        ? 'عرض النتيجة والشهادة <i class="fa-solid fa-award mr-1"></i>'
+        : 'السؤال التالي <i class="fa-solid fa-arrow-left mr-1"></i>';
+    }
+
+    function nextQuestion() {
+      if (currentQIndex < currentQuizList.length - 1) {
+        currentQIndex++;
+        renderQuestion();
+      } else {
+        showCertificate();
+      }
+    }
+
+    function showCertificate() {
+      document.getElementById('quiz-arena').classList.add('hidden');
+      document.getElementById('quiz-result-card').classList.remove('hidden');
+
+      const total = currentQuizList.length;
+      const pct = Math.round((quizScore / total) * 100);
+      const student = state.studentName || 'بطل الصف السادس الابتدائي';
+
+      document.getElementById('cert-student-name').textContent = student;
+      document.getElementById('cert-score').textContent = quizScore;
+      document.getElementById('cert-total').textContent = total;
+      document.getElementById('cert-percent').textContent = `(${pct}%)`;
+
+      let grade = 'تقدير: ممتاز مع مرتبة الشرف 🌟';
+      if (pct < 50) grade = 'تقدير: يحتاج لمراجعة الدروس مرة أخرى 💪';
+      else if (pct < 75) grade = 'تقدير: جيد جدًا — استمر في التفوق 👍';
+      else if (pct < 90) grade = 'تقدير: ممتاز — بطل متميز 🔥';
+
+      document.getElementById('cert-grade-text').textContent = grade;
+      document.getElementById('cert-date').textContent = new Date().toLocaleDateString('ar-EG');
+    }
+
+    function resetQuizToMenu() {
+      document.getElementById('quiz-arena').classList.add('hidden');
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('quiz-start-card').classList.remove('hidden');
+    }
+
+    // ==========================================
+    // ESSAY QUESTIONS BANK (TAB 4)
+    // ==========================================
+    function filterEssay(type) {
+      state.essayFilter = type;
+      document.querySelectorAll('.essay-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-red-800', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      const active = document.getElementById('essay-btn-' + type);
+      active.classList.remove('bg-slate-100', 'text-slate-700');
+      active.classList.add('bg-red-800', 'text-white');
+      renderEssayQuestions();
+    }
+
+    function toggleEssayAnswer(idx) {
+      const ansEl = document.getElementById('essay-ans-' + idx);
+      const btnEl = document.getElementById('essay-toggle-' + idx);
+      const isHidden = ansEl.classList.contains('hidden');
+      if (isHidden) {
+        ansEl.classList.remove('hidden');
+        btnEl.innerHTML = '<i class="fa-solid fa-eye-slash ml-1"></i> إخفاء الإجابة';
+        btnEl.classList.remove('bg-red-50', 'text-red-800');
+        btnEl.classList.add('bg-slate-200', 'text-slate-700');
+      } else {
+        ansEl.classList.add('hidden');
+        btnEl.innerHTML = '<i class="fa-solid fa-eye ml-1"></i> إظهار الإجابة النموذجية';
+        btnEl.classList.remove('bg-slate-200', 'text-slate-700');
+        btnEl.classList.add('bg-red-50', 'text-red-800');
+      }
+    }
+
+    function renderEssayQuestions() {
+      const container = document.getElementById('essay-container');
+      container.innerHTML = '';
+
+      const list = essayQuestions.filter(item =>
+        state.essayFilter === 'all' || item.type === state.essayFilter
+      );
+
+      list.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-3xl card-shadow border border-slate-100 space-y-3';
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-extrabold text-sm sm:text-base text-slate-900 leading-relaxed">
+              <span class="text-red-700 ml-1">${index + 1}.</span> ${item.q}
+            </h3>
+          </div>
+          <div>
+            <button id="essay-toggle-${index}" onclick="toggleEssayAnswer(${index})" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-red-50 text-red-800 border border-red-200 hover:bg-red-100 transition">
+              <i class="fa-solid fa-eye ml-1"></i> إظهار الإجابة النموذجية
+            </button>
+          </div>
+          <div id="essay-ans-${index}" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 text-xs sm:text-sm text-emerald-950 leading-relaxed whitespace-pre-line font-medium">
+            <strong class="text-emerald-800 block mb-1">الإجابة النموذجية:</strong>${item.a}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ==========================================
+    // INSTALL MODAL & PWA MANIFEST
+    // ==========================================
+    function openInstallModal() {
+      const m = document.getElementById('install-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeInstallModal() {
+      const m = document.getElementById('install-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    // Dynamic Web App Manifest for Android "Add to Home Screen"
+    function injectManifest() {
+      const manifest = {
+        name: 'تطبيق الناري - تكنولوجيا المعلومات الصف السادس',
+        short_name: 'تطبيق الناري',
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#f8fafc',
+        theme_color: '#991b1b',
+        description: 'المذكرة والتطبيق التفاعلي الشامل لمادة تكنولوجيا المعلومات والاتصالات للصف السادس الابتدائي'
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    }
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      if (state.studentName) {
+        document.getElementById('student-name-input').value = state.studentName;
+      }
+      updateTopProgress();
+      renderLessons();
+      renderCompareTab();
+      renderEssayQuestions();
+      injectManifest();
+    });
+  </script>
+</body>
+</html>
